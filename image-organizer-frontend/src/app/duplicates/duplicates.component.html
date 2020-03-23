@@ -1,0 +1,17 @@
+<div class="centered-content-container">
+  <div class="centered-content">
+    <ng-container *ngFor="let duplicate of duplicates">
+      <div class="duplicates-list-item">
+        <div class="duplicate-actions button-bar">
+          <button mat-raised-button (click)="markAll(duplicate, true)">Delete All</button>
+          <button mat-raised-button (click)="markAll(duplicate, false)">Keep All</button>
+        </div>
+        <div class="duplicates">
+          <img *ngFor="let image of duplicate.files" [src]="'data:image/jpg;base64,' + image.base64" (click)="markOthersAsDeleted(duplicate, image)"
+               class="duplicate-image" [class.to-delete]="image.toDelete"/>
+        </div>
+      </div>
+      <hr/>
+    </ng-container>
+  </div>
+</div>

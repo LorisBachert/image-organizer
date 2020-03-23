@@ -1,0 +1,19 @@
+<form class="centered-content-container" (ngSubmit)="crawlFiles()">
+  <div class="centered-content">
+    <ng-container *ngIf="result; else directoryChooser;">
+      <p>Found {{result.imageCount}} images.</p>
+      <div class="button-bar">
+        <button mat-raised-button matStepperNext color="primary" type="button">Next</button>
+      </div>
+    </ng-container>
+    <ng-template #directoryChooser>
+      <mat-form-field class="folder-input">
+        <mat-label>Directory</mat-label>
+        <input matInput [(ngModel)]="path" name="path"/>
+      </mat-form-field>
+      <div class="button-bar">
+        <button mat-raised-button color="primary" type="submit">Crawl Files</button>
+      </div>
+    </ng-template>
+  </div>
+</form>

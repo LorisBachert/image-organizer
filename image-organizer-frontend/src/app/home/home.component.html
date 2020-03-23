@@ -1,0 +1,10 @@
+<mat-horizontal-stepper #stepper class="home">
+  <mat-step>
+    <ng-template matStepLabel>Select Directory</ng-template>
+    <app-directory-select></app-directory-select>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Duplicates</ng-template>
+    <app-duplicates></app-duplicates>
+  </mat-step>
+</mat-horizontal-stepper>
