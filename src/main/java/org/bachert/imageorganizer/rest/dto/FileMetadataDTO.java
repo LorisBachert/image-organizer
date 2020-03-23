@@ -1,6 +1,5 @@
 package org.bachert.imageorganizer.rest.dto;
 
-import com.drew.lang.GeoLocation;
 import lombok.*;
 
 import java.nio.file.Path;
@@ -12,11 +11,10 @@ import java.util.Date;
 @Getter
 public class FileMetadataDTO {
 
-    private @NonNull Path path;
+    private @NonNull
+    Path path;
 
     private Date creationDate;
-
-    private GeoLocation geoLocation;
 
     private String extension;
 
@@ -25,4 +23,6 @@ public class FileMetadataDTO {
     private int height;
 
     private String base64;
+
+    private boolean toDelete;
 }

@@ -1,0 +1,11 @@
+<div class="directory-select" [class.collapsed]="done">
+  <form class="directory-select-form" (ngSubmit)="crawlFiles()">
+      <mat-form-field class="folder-input">
+        <mat-label>Directory</mat-label>
+        <input matInput [(ngModel)]="path" name="path"/>
+        <button matSuffix mat-raised-button color="primary" type="submit">
+          {{done ? 'Update' : 'Start'}}
+        </button>
+      </mat-form-field>
+  </form>
+</div>

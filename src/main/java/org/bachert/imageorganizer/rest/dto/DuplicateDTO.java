@@ -10,7 +10,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Setter
 @Getter
-public class DuplicatesDTO {
+public class DuplicateDTO {
 
     private Set<FileMetadataDTO> files = new HashSet<>();
 }

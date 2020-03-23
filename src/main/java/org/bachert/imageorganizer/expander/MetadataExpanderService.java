@@ -13,9 +13,8 @@ public class MetadataExpanderService {
     @Autowired
     private List<Consumer<FileMetadata>> expanders;
 
-    public void expandMetadata(List<FileMetadata> files) {
-        files.forEach(file -> {
-            expanders.forEach(expander -> expander.accept(file));
-        });
+    public FileMetadata expandMetadata(FileMetadata file) {
+        expanders.forEach(expander -> expander.accept(file));
+        return file;
     }
 }

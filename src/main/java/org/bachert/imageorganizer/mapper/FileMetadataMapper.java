@@ -1,11 +1,10 @@
 package org.bachert.imageorganizer.mapper;
 
+import com.drew.lang.GeoLocation;
 import org.apache.commons.io.FileUtils;
 import org.bachert.imageorganizer.model.FileMetadata;
 import org.bachert.imageorganizer.rest.dto.FileMetadataDTO;
-import org.mapstruct.AfterMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -22,5 +21,4 @@ public interface FileMetadataMapper extends GenericMapper<FileMetadataDTO, FileM
             e.printStackTrace();
         }
     }
-
 }

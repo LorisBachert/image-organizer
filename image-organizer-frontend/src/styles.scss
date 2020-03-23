@@ -11,19 +11,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; color: whit
     margin-right: .5rem;
   }
 }
-
-.centered-content-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  overflow-y: auto;
-
-  .centered-content {
-    margin: auto;
-    min-height: 0;
-    width: 100%;
-    max-width: 500px;
-  }
-}

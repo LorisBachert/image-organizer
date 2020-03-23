@@ -14,9 +14,7 @@ public class FilterService {
     @Autowired
     private List<Function<FileMetadata, Boolean>> filters;
 
-    public List<FileMetadata> filter(List<FileMetadata> files) {
-        return files.stream()
-                .filter(file -> filters.stream().allMatch(filter -> filter.apply(file)))
-                .collect(Collectors.toList());
+    public boolean filter(FileMetadata file) {
+        return filters.stream().allMatch(filter -> filter.apply(file));
     }
 }

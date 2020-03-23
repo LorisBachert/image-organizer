@@ -1,5 +1,5 @@
 import {FileMetadata} from './file-metadata.model';
 
-export class Duplicates {
+export class Duplicate {
   files: FileMetadata[];
 }

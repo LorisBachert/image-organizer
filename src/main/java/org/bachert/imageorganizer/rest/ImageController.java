@@ -1,13 +1,10 @@
 package org.bachert.imageorganizer.rest;
 
-import org.bachert.imageorganizer.model.Duplicates;
 import org.bachert.imageorganizer.rest.dto.CrawlFileResultDTO;
-import org.bachert.imageorganizer.rest.dto.DuplicatesDTO;
+import org.bachert.imageorganizer.rest.dto.DuplicateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
-
-import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -22,10 +19,13 @@ public class ImageController {
         return imageService.crawlFiles(path);
     }
 
-    @GetMapping("/duplicates")
-    public DeferredResult<List<DuplicatesDTO>> findDuplicates() {
-        DeferredResult<List<DuplicatesDTO>> response = new DeferredResult<>(10000000L);
-        imageService.findDuplicates(response);
-        return response;
+    @GetMapping(value = "/duplicates/{index}")
+    public DeferredResult<DuplicateDTO> findNextDuplicate(@PathVariable Integer index) throws InterruptedException {
+        return imageService.findNextDuplicate(index);
+    }
+
+    @PostMapping(value = "/duplicates/{index}/resolve")
+    public DeferredResult<DuplicateDTO> resolveDuplicate(@PathVariable Integer index, @RequestBody DuplicateDTO duplicate) throws InterruptedException {
+        return imageService.resolveDuplicate(index, duplicate);
     }
 }

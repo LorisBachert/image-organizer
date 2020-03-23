@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {ImageService} from '../service/image.service';
-import {Duplicates} from '../model/duplicates.model';
-import {FileMetadata} from '../model/file-metadata.model';
-import {MatCheckboxChange} from '@angular/material/checkbox';
+import {Component, OnInit} from '@angular/core';
+import {ImageService} from '../directory-select/shared/service/image.service';
+import {Duplicate} from '../shared/model/duplicate.model';
+import {FileMetadata} from '../shared/model/file-metadata.model';
+import {BehaviorSubject} from 'rxjs';
+import {StepperSelectionEvent} from '@angular/cdk/stepper';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-duplicates',
@@ -11,23 +13,66 @@ import {MatCheckboxChange} from '@angular/material/checkbox';
 })
 export class DuplicatesComponent implements OnInit {
 
-  duplicates: Duplicates[] = [];
+  done = false;
 
-  constructor(private imageService: ImageService) { }
+  duplicate: Duplicate;
+
+  index = 0;
+
+  constructor(private imageService: ImageService,
+              private activatedRoute: ActivatedRoute,
+              private router: Router) {
+  }
 
   ngOnInit(): void {
-    this.imageService.findDuplicates()
-      .subscribe(duplicates => {
-        this.duplicates = duplicates;
+    this.index = +this.activatedRoute.snapshot.queryParamMap.get('duplicate') || 0;
+    this.imageService.findNextDuplicate(this.index)
+      .subscribe(nextDuplicate => {
+        this.duplicate = nextDuplicate;
+        if (! nextDuplicate) {
+          this.done = true;
+        }
       });
   }
 
-  markOthersAsDeleted(duplicate: Duplicates, image: FileMetadata) {
+  markOthersAsDeleted(duplicate: Duplicate, image: FileMetadata) {
     duplicate.files.forEach(file => file.toDelete = true);
     image.toDelete = false;
   }
 
-  markAll(duplicate: Duplicates, toDelete: boolean) {
+  markAll(duplicate: Duplicate, toDelete: boolean) {
     duplicate.files.forEach(file => file.toDelete = toDelete);
+  }
+
+  resolve(duplicate: Duplicate) {
+    this.duplicate = null;
+    this.imageService.resolveDuplicate(this.index, duplicate)
+      .subscribe(nextDuplicate => {
+        this.next();
+        this.duplicate = nextDuplicate;
+        if (! nextDuplicate) {
+          this.done = true;
+        }
+      });
+  }
+
+  next() {
+    this.index++;
+    this.updateQueryParams();
+  }
+
+  back() {
+    this.index--;
+    this.updateQueryParams();
+  }
+
+  updateQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        duplicate: this.index
+      },
+      queryParamsHandling: 'merge'
+    });
   }
 }

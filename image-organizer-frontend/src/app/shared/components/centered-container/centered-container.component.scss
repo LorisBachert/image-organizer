@@ -1,0 +1,29 @@
+.centered-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: 100%;
+
+  &.horizontal {
+    justify-content: center;
+  }
+
+  &.vertical {
+    align-items: center;
+  }
+
+  .content {
+    padding: 1rem;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  &:not(.vertical) {
+    max-height: 100%;
+
+    .content {
+      padding: 0 1rem;
+      max-height: 100%;
+    }
+  }
+}

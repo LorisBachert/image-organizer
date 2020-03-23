@@ -1,14 +1,13 @@
 package org.bachert.imageorganizer.duplicates;
 
 import lombok.extern.slf4j.Slf4j;
-import org.bachert.imageorganizer.model.Duplicates;
+import org.bachert.imageorganizer.model.Duplicate;
 import org.bachert.imageorganizer.model.FileMetadata;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,22 +16,23 @@ import java.util.Optional;
 public class DuplicatesService {
 
     private enum State {
-        NO_DUPLICATE, DUPLICATE_DETECTED
+        PENDING, NO_DUPLICATE, DUPLICATE_DETECTED, DONE
     }
 
-    public List<Duplicates> findDuplicates(List<FileMetadata> files) {
-        List<Duplicates> result = new ArrayList<>();
-        State state = State.NO_DUPLICATE;
-        Duplicates currentDuplicates = new Duplicates();
+    private State state = State.PENDING;
+
+    public void findDuplicates(List<FileMetadata> files, List<Duplicate> duplicates) {
+        state = State.NO_DUPLICATE;
+        Duplicate currentDuplicate = new Duplicate();
         BufferedImage lastImage = null;
         FileMetadata lastFile = null;
         for (FileMetadata file : files) {
-            if (! shouldCompareImages(file, lastFile)) {
+            if (!shouldCompareImages(file, lastFile)) {
                 lastFile = file;
                 if (state.equals(State.DUPLICATE_DETECTED)) {
                     state = State.NO_DUPLICATE;
-                    result.add(currentDuplicates);
-                    currentDuplicates = new Duplicates();
+                    duplicates.add(currentDuplicate);
+                    currentDuplicate = new Duplicate();
                 }
                 continue;
             }
@@ -45,12 +45,12 @@ public class DuplicatesService {
                 }
                 if (similar(currentImage, lastImage)) {
                     state = State.DUPLICATE_DETECTED;
-                    currentDuplicates.add(file);
-                    currentDuplicates.add(lastFile);
+                    currentDuplicate.add(file);
+                    currentDuplicate.add(lastFile);
                 } else if (state.equals(State.DUPLICATE_DETECTED)) {
                     state = State.NO_DUPLICATE;
-                    result.add(currentDuplicates);
-                    currentDuplicates = new Duplicates();
+                    duplicates.add(currentDuplicate);
+                    currentDuplicate = new Duplicate();
                 }
                 lastImage = currentImage;
             } catch (IOException ex) {
@@ -58,7 +58,11 @@ public class DuplicatesService {
             }
             lastFile = file;
         }
-        return result;
+        state = State.DONE;
+    }
+
+    public boolean isDone() {
+        return this.state.equals(State.DONE);
     }
 
     private boolean shouldCompareImages(FileMetadata current, FileMetadata last) {

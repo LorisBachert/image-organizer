@@ -1,14 +1,17 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import {HomeComponent} from './home/home.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AppComponent} from './app.component';
+import {DuplicateListComponent} from './duplicate/duplicate-list/duplicate-list.component';
 
 
 const routes: Routes = [
-  { path: '', component: HomeComponent }
+  {path: '', component: AppComponent},
+  {path: 'duplicates', component: DuplicateListComponent},
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

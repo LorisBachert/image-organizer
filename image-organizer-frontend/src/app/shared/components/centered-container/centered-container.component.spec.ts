@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DuplicatesComponent } from './duplicate.component';
+import { CenteredContainerComponent } from './centered-container.component';
 
-describe('DuplicatesComponent', () => {
-  let component: DuplicatesComponent;
-  let fixture: ComponentFixture<DuplicatesComponent>;
+describe('CenteredContainerComponent', () => {
+  let component: CenteredContainerComponent;
+  let fixture: ComponentFixture<CenteredContainerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DuplicatesComponent ]
+      declarations: [ CenteredContainerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DuplicatesComponent);
+    fixture = TestBed.createComponent(CenteredContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

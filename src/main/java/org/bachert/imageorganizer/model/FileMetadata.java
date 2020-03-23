@@ -23,4 +23,6 @@ public class FileMetadata {
     private int width;
 
     private int height;
+
+    private boolean toDelete;
 }

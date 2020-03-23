@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DuplicatesComponent } from './duplicate.component';
+import { DuplicateDetailsComponent } from './duplicate-details.component';
 
-describe('DuplicatesComponent', () => {
-  let component: DuplicatesComponent;
-  let fixture: ComponentFixture<DuplicatesComponent>;
+describe('DuplicateDetailsComponent', () => {
+  let component: DuplicateDetailsComponent;
+  let fixture: ComponentFixture<DuplicateDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DuplicatesComponent ]
+      declarations: [ DuplicateDetailsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DuplicatesComponent);
+    fixture = TestBed.createComponent(DuplicateDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
