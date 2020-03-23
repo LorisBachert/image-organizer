@@ -1,25 +1,13 @@
-.duplicate-list-item {
-  margin: 2rem 0;
-
-  .duplicate-actions {
-    margin: 1rem 0;
-  }
-}
-
-.duplicate {
+.gallery-container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-auto-rows: 200px;
   grid-gap: .5rem;
 
-  .duplicate-image {
+  .gallery-image {
     max-width: 100%;
     height: 100%;
     object-fit: contain;
     cursor: pointer;
-
-    &.to-delete {
-      opacity: .4;
-    }
   }
 }

@@ -14,7 +14,7 @@ export class ImageService {
   }
 
   public findFiles(path: string): Observable<CrawlFileResult> {
-    return this.http.get<CrawlFileResult>('/images', {
+    return this.http.post<CrawlFileResult>('/images', null, {
       params: {
         path
       }

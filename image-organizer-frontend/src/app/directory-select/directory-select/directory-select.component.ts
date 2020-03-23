@@ -24,7 +24,7 @@ export class DirectorySelectComponent {
     this.imageService.findFiles(this.path)
       .subscribe(() => {
         this.done = true;
-        this.router.navigateByUrl('/duplicates');
+        this.router.navigateByUrl('/gallery');
       });
   }
 }

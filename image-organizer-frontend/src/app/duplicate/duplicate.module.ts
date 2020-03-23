@@ -7,6 +7,7 @@ import { DuplicateListComponent } from './duplicate-list/duplicate-list.componen
 
 @NgModule({
   declarations: [DuplicateDetailsComponent, DuplicateListComponent],
+  exports: [DuplicateDetailsComponent, DuplicateListComponent],
   imports: [
     CommonModule
   ]
