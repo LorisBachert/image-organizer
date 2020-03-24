@@ -28,10 +28,9 @@ export class DirectorySelectComponent implements OnInit {
   }
 
   startProcess() {
-    this.started = true;
     this.processService.startProcess(this.directory)
       .subscribe(() => {
-        this.router.navigateByUrl('/gallery');
+        this.started = true;
       });
   }
 }

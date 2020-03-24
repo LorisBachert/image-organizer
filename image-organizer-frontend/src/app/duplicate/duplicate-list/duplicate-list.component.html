@@ -1,1 +1,7 @@
-<p>duplicate-list works!</p>
+<app-centered-container [vertical]="false">
+  <ul class="duplicate-list">
+    <li *ngFor="let duplicate of duplicates" class="duplicate">
+      <app-image-grid [images]="duplicate.files"></app-image-grid>
+    </li>
+  </ul>
+</app-centered-container>

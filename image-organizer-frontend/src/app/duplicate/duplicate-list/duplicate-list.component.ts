@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DuplicateService} from '../shared/service/duplicate.service';
+import {Duplicate} from '../../shared/model/duplicate.model';
 
 @Component({
   selector: 'app-duplicate-list',
@@ -7,9 +9,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DuplicateListComponent implements OnInit {
 
-  constructor() { }
+  duplicates: Duplicate[];
+
+  constructor(private duplicateService: DuplicateService) { }
 
   ngOnInit(): void {
+    this.duplicateService.findDuplicates()
+      .subscribe(duplicates => {
+        this.duplicates = duplicates;
+      })
   }
 
 }
