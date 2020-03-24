@@ -6,13 +6,16 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormsModule} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
+import { NavigationComponent } from './navigation/navigation.component';
+import {RouterModule} from '@angular/router';
 
 
 
 @NgModule({
-  declarations: [DirectorySelectComponent],
+  declarations: [DirectorySelectComponent, NavigationComponent],
   exports: [
-    DirectorySelectComponent
+    DirectorySelectComponent,
+    NavigationComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +23,8 @@ import {MatButtonModule} from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    MatButtonModule
+    MatButtonModule,
+    RouterModule
   ]
 })
-export class DirectorySelectModule { }
+export class NavigationModule { }

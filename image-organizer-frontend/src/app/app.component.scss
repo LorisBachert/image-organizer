@@ -1,6 +1,16 @@
+$navigation-height: 80px;
+
+.navigation {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $navigation-height;
+}
+
 .outlet {
   position: absolute;
-  top: 80px;
+  top: $navigation-height;
   left: 0;
   right: 0;
   bottom: 0;

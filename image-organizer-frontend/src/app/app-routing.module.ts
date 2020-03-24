@@ -5,7 +5,7 @@ import {GalleryComponent} from './gallery/gallery/gallery.component';
 
 
 const routes: Routes = [
-  {path: 'gallery', component: GalleryComponent},
+  {path: '', component: GalleryComponent},
   {path: 'duplicates', component: DuplicateListComponent},
 ];
 
