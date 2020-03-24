@@ -5,5 +5,5 @@ import org.bachert.imageorganizer.rest.dto.DuplicateDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = { FileMetadataMapper.class })
-public interface DuplicatesMapper extends GenericMapper<DuplicateDTO, Duplicate> {
+public interface DuplicateMapper extends GenericMapper<DuplicateDTO, Duplicate> {
 }

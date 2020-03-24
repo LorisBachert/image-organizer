@@ -1,27 +1,55 @@
 package org.bachert.imageorganizer.duplicates;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bachert.imageorganizer.mapper.DuplicateMapper;
 import org.bachert.imageorganizer.model.Duplicate;
 import org.bachert.imageorganizer.model.FileMetadata;
+import org.bachert.imageorganizer.rest.dto.DuplicateDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.DirectProcessor;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxProcessor;
+import reactor.core.publisher.FluxSink;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class DuplicatesService {
+public class DuplicateService {
+
+    @Autowired
+    private DuplicateMapper duplicateMapper;
 
     private enum State {
-        PENDING, NO_DUPLICATE, DUPLICATE_DETECTED, DONE
+        PENDING, NO_DUPLICATE, DUPLICATE_DETECTED, DONE;
     }
-
     private State state = State.PENDING;
 
-    public void findDuplicates(List<FileMetadata> files, List<Duplicate> duplicates) {
+    private List<Duplicate> duplicates = new ArrayList<>();
+
+    private FluxProcessor<Duplicate, Duplicate> processor;
+
+    private FluxSink<Duplicate> sink;
+
+    public Flux<DuplicateDTO> streamDuplicates() {
+        processor = DirectProcessor.<Duplicate>create().serialize();
+        sink = processor.sink();
+        return processor.map(duplicateMapper::toDTO);
+    }
+
+    public List<DuplicateDTO> getDuplicates() {
+        return this.duplicates.stream().map(duplicateMapper::toDTO).collect(Collectors.toList());
+    }
+
+    public void findDuplicates(List<FileMetadata> files) {
+        this.duplicates = new ArrayList<>();
         state = State.NO_DUPLICATE;
         Duplicate currentDuplicate = new Duplicate();
         BufferedImage lastImage = null;
@@ -30,8 +58,7 @@ public class DuplicatesService {
             if (!shouldCompareImages(file, lastFile)) {
                 lastFile = file;
                 if (state.equals(State.DUPLICATE_DETECTED)) {
-                    state = State.NO_DUPLICATE;
-                    duplicates.add(currentDuplicate);
+                    this.addDuplicate(currentDuplicate);
                     currentDuplicate = new Duplicate();
                 }
                 continue;
@@ -48,8 +75,7 @@ public class DuplicatesService {
                     currentDuplicate.add(file);
                     currentDuplicate.add(lastFile);
                 } else if (state.equals(State.DUPLICATE_DETECTED)) {
-                    state = State.NO_DUPLICATE;
-                    duplicates.add(currentDuplicate);
+                    this.addDuplicate(currentDuplicate);
                     currentDuplicate = new Duplicate();
                 }
                 lastImage = currentImage;
@@ -59,6 +85,14 @@ public class DuplicatesService {
             lastFile = file;
         }
         state = State.DONE;
+    }
+
+    private void addDuplicate(Duplicate duplicate) {
+        this.duplicates.add(duplicate);
+        if (this.sink != null && ! this.sink.isCancelled()) {
+            this.sink.next(duplicate);
+        }
+        this.state = State.NO_DUPLICATE;
     }
 
     public boolean isDone() {

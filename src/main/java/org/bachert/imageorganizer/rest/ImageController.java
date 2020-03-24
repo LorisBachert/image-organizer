@@ -26,14 +26,4 @@ public class ImageController {
     public List<FileMetadataDTO> findGallery(@RequestParam int page) throws InterruptedException {
         return imageService.findGallery(page);
     }
-
-    @GetMapping(value = "/duplicates/{index}")
-    public DeferredResult<DuplicateDTO> findNextDuplicate(@PathVariable Integer index) throws InterruptedException {
-        return imageService.findNextDuplicate(index);
-    }
-
-    @PostMapping(value = "/duplicates/{index}/resolve")
-    public DeferredResult<DuplicateDTO> resolveDuplicate(@PathVariable Integer index, @RequestBody DuplicateDTO duplicate) throws InterruptedException {
-        return imageService.resolveDuplicate(index, duplicate);
-    }
 }

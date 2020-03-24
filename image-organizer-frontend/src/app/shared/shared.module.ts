@@ -4,12 +4,14 @@ import {CenteredContainerComponent} from './components/centered-container/center
 import {SpinnerComponent} from './components/spinner/spinner.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {HttpClientModule} from '@angular/common/http';
+import { ImageComponent } from './components/image/image.component';
+import { ImageGridComponent } from './components/image-grid/image-grid.component';
 
 
 @NgModule({
-  declarations: [CenteredContainerComponent, SpinnerComponent],
+  declarations: [CenteredContainerComponent, SpinnerComponent, ImageComponent, ImageGridComponent],
   exports: [
-    CenteredContainerComponent, SpinnerComponent
+    CenteredContainerComponent, SpinnerComponent, ImageComponent, ImageGridComponent
   ],
   imports: [
     CommonModule,

@@ -1,7 +1,3 @@
 <app-centered-container>
-  <div class="gallery-container">
-    <div *ngFor="let image of images">
-      <img [src]="'data:image/jpg;base64,' + image.base64" class="gallery-image"/>
-    </div>
-  </div>
+  <app-image-grid [images]="images"></app-image-grid>
 </app-centered-container>

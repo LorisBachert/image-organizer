@@ -1,12 +1,11 @@
 package org.bachert.imageorganizer.rest;
 
-import com.sun.org.apache.xpath.internal.axes.SubContextList;
 import lombok.extern.slf4j.Slf4j;
-import org.bachert.imageorganizer.duplicates.DuplicatesService;
+import org.bachert.imageorganizer.duplicates.DuplicateService;
 import org.bachert.imageorganizer.expander.MetadataExpanderService;
 import org.bachert.imageorganizer.filter.FilterService;
 import org.bachert.imageorganizer.loader.FileCrawler;
-import org.bachert.imageorganizer.mapper.DuplicatesMapper;
+import org.bachert.imageorganizer.mapper.DuplicateMapper;
 import org.bachert.imageorganizer.mapper.FileMetadataMapper;
 import org.bachert.imageorganizer.model.Duplicate;
 import org.bachert.imageorganizer.model.FileMetadata;
@@ -35,10 +34,10 @@ public class ImageService {
     private MetadataExpanderService expanderService;
 
     @Autowired
-    private DuplicatesMapper duplicatesMapper;
+    private DuplicateMapper duplicatesMapper;
 
     @Autowired
-    private DuplicatesService duplicatesService;
+    private DuplicateService duplicatesService;
 
     @Autowired
     private FileMetadataMapper fileMetadataMapper;
@@ -47,8 +46,6 @@ public class ImageService {
     private ThreadPoolTaskExecutor taskExecutor;
 
     private List<FileMetadata> files = new ArrayList<>();
-
-    private List<Duplicate> duplicates = new ArrayList<>();
 
     public CrawlFileResultDTO crawlFiles(String path) {
         this.files = FileCrawler.getFiles(path).stream()
@@ -63,32 +60,7 @@ public class ImageService {
                 .map(this.expanderService::expandMetadata)
                 .sorted(new FileMetadataComparator())
                 .collect(Collectors.toList());
-        this.duplicates = new ArrayList<>();
-        this.duplicatesService.findDuplicates(sortedFiles, this.duplicates);
-    }
-
-    public DeferredResult<DuplicateDTO> findNextDuplicate(int index) throws InterruptedException {
-        DeferredResult<DuplicateDTO> result = new DeferredResult<>();
-        while (this.duplicates.isEmpty() && this.duplicates.size() < index && !this.duplicatesService.isDone()) {
-            Thread.sleep(1000);
-        }
-        if (this.duplicates.size() > index) {
-            result.setResult(duplicatesMapper.toDTO(this.duplicates.get(index)));
-        } else {
-            result.setResult(null);
-        }
-        return result;
-    }
-
-    public DeferredResult<DuplicateDTO> resolveDuplicate(Integer index, DuplicateDTO duplicate) throws InterruptedException {
-        duplicate.getFiles().forEach(postedFiles -> {
-            this.files.stream()
-                    .filter(file -> file.getPath().toString().equals(postedFiles.getPath().toString()))
-                    .findFirst()
-                    .ifPresent(existingFile -> existingFile.setToDelete(postedFiles.isToDelete()));
-        });
-        this.duplicates.get(index).setResolved(true);
-        return findNextDuplicate(index + 1);
+        this.duplicatesService.findDuplicates(sortedFiles);
     }
 
     public List<FileMetadataDTO> findGallery(int page) {
