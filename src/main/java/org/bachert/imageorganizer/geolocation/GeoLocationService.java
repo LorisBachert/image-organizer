@@ -1,9 +1,9 @@
 package org.bachert.imageorganizer.geolocation;
 
 import com.drew.lang.GeoLocation;
-import org.bachert.imageorganizer.model.GeoLocationAddress;
-import org.bachert.imageorganizer.model.GeoLocationResult;
-import org.bachert.imageorganizer.model.Trip;
+import org.bachert.imageorganizer.geolocation.model.GeoLocationAddress;
+import org.bachert.imageorganizer.geolocation.model.GeoLocationResult;
+import org.bachert.imageorganizer.grouping.model.Trip;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

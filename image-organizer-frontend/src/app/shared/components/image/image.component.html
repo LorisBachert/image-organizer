@@ -1,1 +1,1 @@
-<img [src]="'data:image/jpg;base64,' + image.base64" class="image"/>
+<img *ngIf="url" [src]="url" class="image"/>

@@ -1,13 +1,12 @@
 package org.bachert.imageorganizer.filter.impl;
 
 import org.apache.commons.io.FilenameUtils;
-import org.bachert.imageorganizer.model.FileMetadata;
+import org.bachert.imageorganizer.filter.FileFilter;
+import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.springframework.stereotype.Component;
 
-import java.util.function.Function;
-
 @Component
-public class ExtensionFilter implements Function<FileMetadata, Boolean> {
+public class ExtensionFilter implements FileFilter {
 
     @Override
     public Boolean apply(FileMetadata fileMetadata) {

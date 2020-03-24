@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CrawlFileResult} from '../../shared/model/crawl-file-result.model';
-import {Observable} from 'rxjs';
-import {ImageService} from '../shared/service/image.service';
-import {FileMetadata} from '../../shared/model/file-metadata.model';
+import {ProcessService} from '../shared/service/process.service';
 import {ActivatedRoute, Router, RouterEvent} from '@angular/router';
 
 @Component({
@@ -12,28 +9,28 @@ import {ActivatedRoute, Router, RouterEvent} from '@angular/router';
 })
 export class DirectorySelectComponent implements OnInit {
 
-  path = 'D:\\Bilder';
+  directory = 'D:\\Bilder';
 
-  done: boolean;
+  started: boolean;
 
-  isHome: boolean;
-
-  constructor(private imageService: ImageService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) {
+  constructor(private processService: ProcessService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
-    this.isHome = this.activatedRoute.snapshot.url.length === 0;
-    this.router.events.subscribe((routerEvent: RouterEvent) => {
-      this.isHome = routerEvent.url === '';
-    })
+    this.processService.findProcessState()
+      .subscribe(processState => {
+        this.started = processState.started;
+        if (this.started) {
+          this.directory = processState.directory;
+        }
+      })
   }
 
-  crawlFiles() {
-    this.imageService.findFiles(this.path)
+  startProcess() {
+    this.started = true;
+    this.processService.startProcess(this.directory)
       .subscribe(() => {
-        this.done = true;
         this.router.navigateByUrl('/gallery');
       });
   }

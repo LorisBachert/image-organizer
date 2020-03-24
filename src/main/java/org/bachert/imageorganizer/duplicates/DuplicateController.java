@@ -1,12 +1,9 @@
 package org.bachert.imageorganizer.duplicates;
 
-import org.bachert.imageorganizer.rest.dto.DuplicateDTO;
+import org.bachert.imageorganizer.duplicates.dto.DuplicateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
@@ -27,5 +24,10 @@ public class DuplicateController {
     @GetMapping
     public List<DuplicateDTO> findDuplicates() {
         return duplicateService.getDuplicates();
+    }
+
+    @PostMapping("/{id}/resolve")
+    public void resolveDuplicate(@PathVariable String id, @RequestBody DuplicateDTO duplicateDTO) {
+        duplicateService.resolveDuplicate(id, duplicateDTO);
     }
 }

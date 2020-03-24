@@ -1,10 +1,10 @@
 <div class="directory-select">
-  <form class="directory-select-form" (ngSubmit)="crawlFiles()">
+  <form class="directory-select-form" (ngSubmit)="startProcess()">
       <mat-form-field class="folder-input">
         <mat-label>Directory</mat-label>
-        <input matInput [(ngModel)]="path" name="path"/>
+        <input matInput [(ngModel)]="directory" name="path"/>
         <button matSuffix mat-raised-button color="primary" type="submit">
-          {{done ? 'Update' : 'Start'}}
+          {{started ? 'Update' : 'Start'}}
         </button>
       </mat-form-field>
   </form>
