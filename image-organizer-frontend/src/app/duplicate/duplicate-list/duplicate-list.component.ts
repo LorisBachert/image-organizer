@@ -9,14 +9,19 @@ import {Duplicate} from '../../shared/model/duplicate.model';
 })
 export class DuplicateListComponent implements OnInit {
 
-  duplicates: Duplicate[];
+  duplicates: Duplicate[] = [];
 
   constructor(private duplicateService: DuplicateService) { }
 
   ngOnInit(): void {
-    this.duplicateService.findDuplicates()
+    this.duplicateService.duplicates$
       .subscribe(duplicates => {
-        this.duplicates = duplicates;
+        duplicates.forEach(duplicate => {
+          const isNew = this.duplicates.find(existingDuplicate => existingDuplicate.id === duplicate.id) === undefined;
+          if (isNew) {
+            this.duplicates.push(duplicate);
+          }
+        });
       })
   }
 

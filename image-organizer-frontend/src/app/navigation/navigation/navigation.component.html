@@ -1,8 +1,11 @@
 <nav class="navigation">
   <a routerLink="/"><h1 class="title">Image Organizer</h1></a>
   <app-directory-select></app-directory-select>
-  <div class="nav-links">
-    <a routerLink="/" routerLinkActive="active">Gallery</a>
-    <a routerLink="/duplicates" routerLinkActive="active">Duplicates</a>
+  <div class="nav-links" *ngIf="processService.started$ | async">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Gallery</a>
+    <a routerLink="/duplicates" routerLinkActive="active">
+      Duplicates
+      <app-spinner class="spinner" *ngIf="!(duplicateService.done$ | async)"></app-spinner>
+    </a>
   </div>
 </nav>

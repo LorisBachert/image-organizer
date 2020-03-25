@@ -47,6 +47,7 @@ public class ProcessService {
                         .map(metadataExpanderService::expandMetadata)
                         .doOnNext(sessionDataService::add)
                         .collect(Collectors.toList())
+                        .doOnNext((files) -> sessionDataService.setDoneLoadingFiles(true))
                         .subscribe(imageAnalyzerService::analyze)
         );
         return new StartProcessResultDTO(filePaths.size());

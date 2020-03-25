@@ -11,17 +11,17 @@ export class DirectorySelectComponent implements OnInit {
 
   directory = 'D:\\Bilder';
 
-  started: boolean;
+  processService: ProcessService;
 
-  constructor(private processService: ProcessService,
-              private router: Router) {
+  constructor(processService: ProcessService) {
+    this.processService = processService;
   }
 
   ngOnInit(): void {
     this.processService.findProcessState()
       .subscribe(processState => {
-        this.started = processState.started;
-        if (this.started) {
+        const started = processState.started;
+        if (started) {
           this.directory = processState.directory;
         }
       })
@@ -30,7 +30,7 @@ export class DirectorySelectComponent implements OnInit {
   startProcess() {
     this.processService.startProcess(this.directory)
       .subscribe(() => {
-        this.started = true;
+        console.log("Process started")
       });
   }
 }

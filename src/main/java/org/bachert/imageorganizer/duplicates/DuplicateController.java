@@ -16,11 +16,6 @@ public class DuplicateController {
     @Autowired
     private DuplicateService duplicateService;
 
-    @GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<DuplicateDTO> streamDuplicates() {
-        return duplicateService.streamDuplicates();
-    }
-
     @GetMapping
     public List<DuplicateDTO> findDuplicates() {
         return duplicateService.getDuplicates();
@@ -29,5 +24,10 @@ public class DuplicateController {
     @PostMapping("/{id}/resolve")
     public void resolveDuplicate(@PathVariable String id, @RequestBody DuplicateDTO duplicateDTO) {
         duplicateService.resolveDuplicate(id, duplicateDTO);
+    }
+
+    @GetMapping(value = "/done", produces = MediaType.TEXT_PLAIN_VALUE)
+    public @ResponseBody String isDone() {
+        return String.valueOf(duplicateService.isDone());
     }
 }

@@ -4,7 +4,7 @@
         <mat-label>Directory</mat-label>
         <input matInput [(ngModel)]="directory" name="path"/>
         <button matSuffix mat-raised-button color="primary" type="submit">
-          {{started ? 'Update' : 'Start'}}
+          {{(processService.started$ | async) ? 'Update' : 'Start'}}
         </button>
       </mat-form-field>
   </form>

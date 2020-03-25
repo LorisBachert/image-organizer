@@ -14,8 +14,13 @@ import java.util.*;
 @Service
 public class SessionDataService {
 
+    @Getter
     @Setter
-    private SessionState state;
+    private boolean doneDetectingDuplicates = false;
+
+    @Getter
+    @Setter
+    private boolean doneLoadingFiles = false;
 
     private Map<Path, FileMetadata> files = new HashMap<>();
 
@@ -51,5 +56,12 @@ public class SessionDataService {
 
     public List<Duplicate> getDuplicates() {
         return new ArrayList<>(this.duplicates.values());
+    }
+
+    public void reset() {
+        this.files.clear();
+        this.duplicates.clear();
+        this.doneLoadingFiles = false;
+        this.doneDetectingDuplicates = false;
     }
 }

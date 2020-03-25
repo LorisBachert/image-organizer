@@ -67,6 +67,7 @@ public class DuplicateDetectionService implements ImageAnalyzer {
             lastFile = file;
         }
         state = State.DONE;
+        sessionDataService.setDoneDetectingDuplicates(true);
     }
 
     private enum State {
@@ -78,10 +79,6 @@ public class DuplicateDetectionService implements ImageAnalyzer {
     private void addDuplicate(Duplicate duplicate) {
         sessionDataService.addDuplicate(duplicate);
         this.state = State.NO_DUPLICATE;
-    }
-
-    public boolean isDone() {
-        return this.state.equals(State.DONE);
     }
 
     private boolean shouldCompareImages(FileMetadata current, FileMetadata last) {

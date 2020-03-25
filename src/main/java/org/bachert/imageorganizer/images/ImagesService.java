@@ -49,4 +49,8 @@ public class ImagesService {
             return outputStream.toByteArray();
         }
     }
+
+    public boolean isDone() {
+        return sessionDataService.isDoneLoadingFiles();
+    }
 }

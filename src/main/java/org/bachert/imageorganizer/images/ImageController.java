@@ -2,6 +2,7 @@ package org.bachert.imageorganizer.images;
 
 import org.bachert.imageorganizer.metadata.dto.FileMetadataDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -25,5 +26,10 @@ public class ImageController {
     @GetMapping
     public @ResponseBody byte[] getImage(@RequestParam String path, @RequestParam(required = false, defaultValue = "true") boolean thumbnail) throws IOException {
         return imagesService.getImage(path, thumbnail);
+    }
+
+    @GetMapping(value = "/done", produces = MediaType.TEXT_PLAIN_VALUE)
+    public @ResponseBody String isDone() {
+        return String.valueOf(imagesService.isDone());
     }
 }

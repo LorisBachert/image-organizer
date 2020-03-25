@@ -34,12 +34,6 @@ public class DuplicateService {
     @Autowired
     private DuplicateMapper duplicateMapper;
 
-    public Flux<DuplicateDTO> streamDuplicates() {
-        FluxProcessor<Duplicate, Duplicate> processor = DirectProcessor.<Duplicate>create().serialize();
-        FluxSink<Duplicate> sink = processor.sink();
-        return processor.map(duplicateMapper::toDTO);
-    }
-
     public List<DuplicateDTO> getDuplicates() {
         return sessionDataService.getDuplicates().stream().map(duplicateMapper::toDTO).collect(toList());
     }
@@ -53,5 +47,9 @@ public class DuplicateService {
                     .ifPresent(sentFile -> file.setToDelete(sentFile.isToDelete()));
         });
         duplicate.setResolved(true);
+    }
+
+    public boolean isDone() {
+        return sessionDataService.isDoneDetectingDuplicates();
     }
 }
