@@ -11,7 +11,7 @@ export class DuplicateService extends BaseService {
 
   public readonly duplicates$ = new BehaviorSubject<Duplicate[]>([]);
 
-  public readonly done$ = new BehaviorSubject<Boolean>(false);
+  public readonly done$ = new BehaviorSubject<Boolean>(true);
 
   constructor(private http: HttpClient) {
     super();

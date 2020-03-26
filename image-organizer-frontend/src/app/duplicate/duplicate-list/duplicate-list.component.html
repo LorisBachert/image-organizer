@@ -22,4 +22,7 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+  <p>
+    <app-spinner *ngIf="! (duplicateService.done$ | async)"></app-spinner>
+  </p>
 </app-centered-container>

@@ -17,7 +17,10 @@ export class DuplicateListComponent implements OnInit {
 
   duplicates: Duplicate[] = [];
 
-  constructor(private duplicateService: DuplicateService) { }
+  duplicateService: DuplicateService;
+
+  constructor(duplicateService: DuplicateService) {
+    this.duplicateService = duplicateService; }
 
   ngOnInit(): void {
     this.duplicateService.duplicates$
@@ -68,9 +71,9 @@ export class DuplicateListComponent implements OnInit {
         file.toDelete = !file.toDelete;
       }
     } else if ($event.key === 'ArrowLeft') {
-      this.selectedIndex--;
+      this.selectedIndex = Math.max(-1, this.selectedIndex - 1);
     } else if ($event.key === 'ArrowRight') {
-      this.selectedIndex++;
+      this.selectedIndex = Math.min(this.findDuplicatesToDisplay().length, this.selectedIndex + 1);
     } else if ($event.key.toLowerCase() === 'a') {
       this.markAllForDeletion(duplicate, false);
     } else if ($event.key.toLowerCase() === 'd') {
