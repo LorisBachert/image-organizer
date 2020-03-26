@@ -87,13 +87,4 @@ export class TripsComponent implements OnInit {
   toggleImageDeletion(image: FileMetadata) {
     this.imageService.toggleDeletion(image.id);
   }
-
-  update(trip: Trip, form: NgForm, $event: any) {
-    $event.preventDefault();
-    $event.stopPropagation();
-    this.tripService.update(trip)
-      .subscribe(() => {
-        form.form.markAsPristine();
-      });
-  }
 }

@@ -1,0 +1,8 @@
+<form (ngSubmit)="update(trip, form, $event)" #form="ngForm"
+      (click)="$event.stopPropagation()" autocomplete="off">
+  <mat-form-field class="change-trip-name">
+    <mat-label>Trip Name</mat-label>
+    <input matInput [(ngModel)]="trip.name" required name="tripName"/>
+    <button *ngIf="form.dirty" mat-raised-button color="primary" matSuffix [disabled]="form.invalid">Save</button>
+  </mat-form-field>
+</form>

@@ -10,11 +10,12 @@ import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
+import { TripNameFormComponent } from './trip-name-form/trip-name-form.component';
 
 
 
 @NgModule({
-  declarations: [TripsComponent],
+  declarations: [TripsComponent, TripNameFormComponent],
   imports: [
     CommonModule,
     SharedModule,
