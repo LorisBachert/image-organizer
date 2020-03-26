@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {TripService} from '../shared/service/trip.service';
 import {Trip} from '../shared/model/trip.model';
 import {DateService} from '../../shared/service/date.service';
@@ -7,6 +7,9 @@ import {FileMetadata} from '../../shared/model/file-metadata.model';
 import * as arrayMove from 'array-move';
 import {ImageService} from '../../core/image/image.service';
 import {combineLatest, Observable} from 'rxjs';
+import {NgForm} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatMenuTrigger} from '@angular/material/menu';
 
 class ImageDragData {
   trip: Trip;
@@ -85,9 +88,12 @@ export class TripsComponent implements OnInit {
     this.imageService.toggleDeletion(image.id);
   }
 
-  update(trip: Trip, $event: any) {
+  update(trip: Trip, form: NgForm, $event: any) {
     $event.preventDefault();
+    $event.stopPropagation();
     this.tripService.update(trip)
-      .subscribe(() => {});
+      .subscribe(() => {
+        form.form.markAsPristine();
+      });
   }
 }

@@ -9,6 +9,7 @@ import {CoreModule} from './core/core.module';
 import {GalleryModule} from './gallery/gallery.module';
 import {NavigationModule} from './navigation/navigation.module';
 import {TripsModule} from './trips/trips.module';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
