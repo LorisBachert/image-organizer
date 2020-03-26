@@ -5,6 +5,7 @@ import lombok.Setter;
 import org.bachert.imageorganizer.duplicates.model.Duplicate;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
+import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
@@ -22,9 +23,15 @@ public class SessionDataService {
     @Setter
     private boolean doneLoadingFiles = false;
 
+    @Getter
+    @Setter
+    private boolean doneDetectingTrips = false;
+
     private Map<Long, FileMetadata> files = new HashMap<>();
 
     private Map<Long, Duplicate> duplicates = new HashMap<>();
+
+    private Map<Long, Trip> trips = new HashMap<>();
 
     public void add(FileMetadata fileMetadata) {
         fileMetadata.setId((long) files.size());
@@ -59,10 +66,25 @@ public class SessionDataService {
         return new ArrayList<>(this.duplicates.values());
     }
 
+    public void addTrip(Trip trip) {
+        trip.setId((long) trips.size());
+        this.trips.put(trip.getId(), trip);
+    }
+
+    public Trip getTrip(Long id) {
+        return this.trips.get(id);
+    }
+
+    public List<Trip> getTrips() {
+        return new ArrayList<>(this.trips.values());
+    }
+
     public void reset() {
         this.files.clear();
         this.duplicates.clear();
+        this.trips.clear();
         this.doneLoadingFiles = false;
         this.doneDetectingDuplicates = false;
+        this.doneDetectingTrips = false;
     }
 }

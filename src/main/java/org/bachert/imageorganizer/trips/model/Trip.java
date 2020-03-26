@@ -1,4 +1,4 @@
-package org.bachert.imageorganizer.grouping.model;
+package org.bachert.imageorganizer.trips.model;
 
 import com.drew.lang.GeoLocation;
 import lombok.Getter;
@@ -13,6 +13,8 @@ import java.util.List;
 @Getter
 @Setter
 public class Trip {
+
+    private Long id;
 
     private List<FileMetadata> files = new ArrayList<>();
 

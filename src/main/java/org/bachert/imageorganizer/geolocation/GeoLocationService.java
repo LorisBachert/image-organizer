@@ -3,7 +3,7 @@ package org.bachert.imageorganizer.geolocation;
 import com.drew.lang.GeoLocation;
 import org.bachert.imageorganizer.geolocation.model.GeoLocationAddress;
 import org.bachert.imageorganizer.geolocation.model.GeoLocationResult;
-import org.bachert.imageorganizer.grouping.model.Trip;
+import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class GeoLocationService {
         }
         GeoLocationAddress geoLocationAddress = CACHE.computeIfAbsent(geoLocation, location -> {
             RestTemplate restTemplate = new RestTemplate();
-            String url = String.format("https://nominatim.openstreetmap.org/reverse?lat=%s&lon=%s&zoom=14&format=json",
+            String url = String.format("https://nominatim.openstreetmap.org/reverse?lat=%s&lon=%s&zoom=18&format=json&email=loris.bachert@gmx.de",
                     trip.getGeoLocation().getLatitude(), trip.getGeoLocation().getLongitude());
             ResponseEntity<GeoLocationResult> response
                     = restTemplate.getForEntity(url, GeoLocationResult.class);

@@ -8,6 +8,7 @@ import {DuplicateModule} from './duplicate/duplicate.module';
 import {CoreModule} from './core/core.module';
 import {GalleryModule} from './gallery/gallery.module';
 import {NavigationModule} from './navigation/navigation.module';
+import {TripsModule} from './trips/trips.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {NavigationModule} from './navigation/navigation.module';
     DuplicateModule,
     CoreModule,
     GalleryModule,
-    NavigationModule
+    NavigationModule,
+    TripsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

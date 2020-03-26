@@ -8,6 +8,7 @@ import {StartProcessResult} from '../model/start-process-result.model';
 import {ProcessState} from '../model/process-state.model';
 import {DuplicateService} from '../../../duplicate/shared/service/duplicate.service';
 import {tap} from 'rxjs/operators';
+import {TripService} from '../../../trips/shared/service/trip.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class ProcessService {
   public readonly started$ = new BehaviorSubject<Boolean>(false);
 
   constructor(private http: HttpClient,
-              private duplicateService: DuplicateService) {
+              private duplicateService: DuplicateService,
+              private tripService: TripService) {
   }
 
   public startProcess(directory: string): Observable<StartProcessResult> {
@@ -46,5 +48,6 @@ export class ProcessService {
   private initialize() {
     this.started$.next(true);
     this.duplicateService.start();
+    this.tripService.start();
   }
 }

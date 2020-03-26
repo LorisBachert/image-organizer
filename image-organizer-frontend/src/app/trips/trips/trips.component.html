@@ -1,0 +1,20 @@
+<app-centered-container [vertical]="false">
+  <mat-card class="action-bar">
+    <h2 class="title">Trips</h2>
+  </mat-card>
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{dateService.format(trip.startDate)}} - {{dateService.format(trip.endDate)}}: {{trip.city}}, {{trip.country}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container *ngIf="panel.expanded">
+        <app-image-grid [images]="trip.files"></app-image-grid>
+      </ng-container>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <p>
+    <app-spinner *ngIf="! (tripService.done$ | async)"></app-spinner>
+  </p>
+</app-centered-container>

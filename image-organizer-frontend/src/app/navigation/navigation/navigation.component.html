@@ -7,5 +7,9 @@
       Duplicates
       <app-spinner class="spinner" *ngIf="!(duplicateService.done$ | async)"></app-spinner>
     </a>
+    <a routerLink="/trips" routerLinkActive="active">
+      Trips
+      <app-spinner class="spinner" *ngIf="!(tripService.done$ | async)"></app-spinner>
+    </a>
   </div>
 </nav>
