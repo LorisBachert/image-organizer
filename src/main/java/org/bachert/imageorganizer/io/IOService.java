@@ -3,6 +3,7 @@ package org.bachert.imageorganizer.io;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.bachert.imageorganizer.metadata.model.FileMetadata;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
-public class FileCrawler {
+public class IOService {
 
     public static List<Path> getFiles(String path) {
         try {
@@ -26,5 +27,14 @@ public class FileCrawler {
             log.error("Failed to crawl files", e);
         }
         return new ArrayList<>();
+    }
+
+    public static void delete(FileMetadata file) {
+        try {
+            log.debug("Deleting file: {}", file.getPath());
+            Files.delete(file.getPath());
+        } catch (IOException e) {
+            log.error("Failed to delete file: {}", file.getPath(), e);
+        }
     }
 }

@@ -21,4 +21,9 @@ public class ProcessController {
     public ProcessStateDTO getState() {
         return processService.getState();
     }
+
+    @PostMapping("/end")
+    public void end() {
+        processService.end();
+    }
 }

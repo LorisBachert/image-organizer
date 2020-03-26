@@ -43,14 +43,14 @@ public class SessionDataService {
                 .orElseThrow(() -> new IllegalArgumentException("File does not exist: " + id));
     }
 
-    public void markForDeletion(Long id, boolean toDelete) {
-        get(id).setToDelete(toDelete);
-    }
-
     public List<FileMetadata> getSortedFiles() {
-        ArrayList<FileMetadata> files = new ArrayList<>(this.files.values());
+        List<FileMetadata> files = getFiles();
         files.sort(new FileMetadataComparator());
         return files;
+    }
+
+    public List<FileMetadata> getFiles() {
+        return new ArrayList<>(this.files.values());
     }
 
     public void addDuplicate(Duplicate duplicate) {

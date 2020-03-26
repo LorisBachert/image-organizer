@@ -53,4 +53,11 @@ export class ProcessService {
     this.tripService.start();
     this.imageService.start();
   }
+
+  end(): Observable<void> {
+    return this.http.post<void>('/process/end', null)
+      .pipe(
+        tap(() => this.started$.next(false))
+      );
+  }
 }

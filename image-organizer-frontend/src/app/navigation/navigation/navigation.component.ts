@@ -25,4 +25,10 @@ export class NavigationComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  end() {
+    this.processService.end()
+      .subscribe(() => {
+        console.log('done');
+      })
+  }
 }

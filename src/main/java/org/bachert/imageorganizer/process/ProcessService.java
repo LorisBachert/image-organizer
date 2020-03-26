@@ -1,9 +1,9 @@
 package org.bachert.imageorganizer.process;
 
 import org.bachert.imageorganizer.analyzer.ImageAnalyzerService;
-import org.bachert.imageorganizer.metadata.MetadataExpanderService;
 import org.bachert.imageorganizer.filter.FilterService;
-import org.bachert.imageorganizer.io.FileCrawler;
+import org.bachert.imageorganizer.io.IOService;
+import org.bachert.imageorganizer.metadata.MetadataExpanderService;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.process.dto.ProcessStateDTO;
 import org.bachert.imageorganizer.process.dto.StartProcessResultDTO;
@@ -40,7 +40,7 @@ public class ProcessService {
     public StartProcessResultDTO process(String rootDirectory) {
         this.sessionDataService.reset();
         this.lastScannedDirectory = rootDirectory;
-        List<Path> filePaths = FileCrawler.getFiles(rootDirectory);
+        List<Path> filePaths = IOService.getFiles(rootDirectory);
         taskExecutor.execute(() ->
                 Flux.fromIterable(filePaths)
                         .map(FileMetadata::new)
@@ -56,5 +56,11 @@ public class ProcessService {
 
     public ProcessStateDTO getState() {
         return new ProcessStateDTO(lastScannedDirectory != null, lastScannedDirectory);
+    }
+
+    public void end() {
+        this.sessionDataService.getSortedFiles().stream()
+                .filter(FileMetadata::isToDelete)
+                .forEach(IOService::delete);
     }
 }
