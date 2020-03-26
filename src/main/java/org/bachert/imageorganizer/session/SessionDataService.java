@@ -22,21 +22,22 @@ public class SessionDataService {
     @Setter
     private boolean doneLoadingFiles = false;
 
-    private Map<Path, FileMetadata> files = new HashMap<>();
+    private Map<Long, FileMetadata> files = new HashMap<>();
 
-    private Map<String, Duplicate> duplicates = new HashMap<>();
+    private Map<Long, Duplicate> duplicates = new HashMap<>();
 
     public void add(FileMetadata fileMetadata) {
-        files.put(fileMetadata.getPath(), fileMetadata);
+        fileMetadata.setId((long) files.size());
+        files.put(fileMetadata.getId(), fileMetadata);
     }
 
-    public FileMetadata get(String path) {
-        return Optional.ofNullable(files.get(Paths.get(path)))
-                .orElseThrow(() -> new IllegalArgumentException("File does not exist: " + path));
+    public FileMetadata get(Long id) {
+        return Optional.ofNullable(files.get(id))
+                .orElseThrow(() -> new IllegalArgumentException("File does not exist: " + id));
     }
 
-    public void markForDeletion(String path, boolean toDelete) {
-        get(path).setToDelete(toDelete);
+    public void markForDeletion(Long id, boolean toDelete) {
+        get(id).setToDelete(toDelete);
     }
 
     public List<FileMetadata> getSortedFiles() {
@@ -46,11 +47,11 @@ public class SessionDataService {
     }
 
     public void addDuplicate(Duplicate duplicate) {
-        duplicate.setId(UUID.randomUUID().toString());
+        duplicate.setId((long) duplicates.size());
         this.duplicates.put(duplicate.getId(), duplicate);
     }
 
-    public Duplicate getDuplicate(String id) {
+    public Duplicate getDuplicate(Long id) {
         return this.duplicates.get(id);
     }
 

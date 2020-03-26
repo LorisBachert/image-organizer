@@ -22,7 +22,7 @@ public class DuplicateController {
     }
 
     @PostMapping("/{id}/resolve")
-    public void resolveDuplicate(@PathVariable String id, @RequestBody DuplicateDTO duplicateDTO) {
+    public void resolveDuplicate(@PathVariable Long id, @RequestBody DuplicateDTO duplicateDTO) {
         duplicateService.resolveDuplicate(id, duplicateDTO);
     }
 

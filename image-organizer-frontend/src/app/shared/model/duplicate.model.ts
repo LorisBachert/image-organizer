@@ -1,6 +1,7 @@
 import {FileMetadata} from './file-metadata.model';
 
 export class Duplicate {
-  id: string;
+  id: number;
   files: FileMetadata[];
+  resolved: boolean;
 }

@@ -43,7 +43,7 @@ public class ImagesService {
         } else {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             Thumbnails.of(new FileInputStream(pathString))
-                    .size(300, 300)
+                    .size(500, 500)
                     .keepAspectRatio(true)
                     .toOutputStream(outputStream);
             return outputStream.toByteArray();

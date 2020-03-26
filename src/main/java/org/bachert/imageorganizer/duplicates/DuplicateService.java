@@ -38,14 +38,9 @@ public class DuplicateService {
         return sessionDataService.getDuplicates().stream().map(duplicateMapper::toDTO).collect(toList());
     }
 
-    public void resolveDuplicate(String id, DuplicateDTO duplicateDTO) {
+    public void resolveDuplicate(Long id, DuplicateDTO duplicateDTO) {
         Duplicate duplicate = sessionDataService.getDuplicate(id);
-        duplicate.getFiles().forEach(file -> {
-            duplicateDTO.getFiles()
-                    .stream().filter(sentFile -> sentFile.getPath().equals(file.getPath()))
-                    .findFirst()
-                    .ifPresent(sentFile -> file.setToDelete(sentFile.isToDelete()));
-        });
+        duplicateDTO.getFiles().forEach(file -> sessionDataService.markForDeletion(file.getId(), file.isToDelete()));
         duplicate.setResolved(true);
     }
 

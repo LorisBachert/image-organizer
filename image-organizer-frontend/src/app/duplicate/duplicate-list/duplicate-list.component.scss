@@ -11,3 +11,20 @@
     }
   }
 }
+
+.action-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .title {
+    flex: 1;
+    margin: 0;
+  }
+}
+
+.title-check-icon {
+  font-size: .9rem;
+  margin-left: .5rem;
+}

@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 public class DuplicateDTO {
 
-    private String id;
+    private Long id;
 
     private Set<FileMetadataDTO> files = new HashSet<>();
 

@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 public class Duplicate {
 
-    private String id;
+    private Long id;
 
     private Set<FileMetadata> files = new HashSet<>();
 

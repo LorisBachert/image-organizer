@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FileMetadata} from '../../model/file-metadata.model';
 
 @Component({
@@ -9,6 +9,8 @@ import {FileMetadata} from '../../model/file-metadata.model';
 export class ImageGridComponent implements OnInit {
 
   @Input() images: FileMetadata[];
+
+  @Output() imageClick = new EventEmitter<FileMetadata>();
 
   constructor() {
   }

@@ -11,7 +11,7 @@ import java.util.Date;
 @Getter
 public class FileMetadataDTO {
 
-    private String id;
+    private Long id;
 
     private @NonNull
     Path path;

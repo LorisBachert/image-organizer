@@ -13,7 +13,7 @@ import java.util.UUID;
 @Getter
 public class FileMetadata {
 
-    private String id = UUID.randomUUID().toString();
+    private Long id;
 
     private @NonNull Path path;
 

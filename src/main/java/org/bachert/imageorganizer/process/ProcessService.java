@@ -38,6 +38,7 @@ public class ProcessService {
     private String lastScannedDirectory;
 
     public StartProcessResultDTO process(String rootDirectory) {
+        this.sessionDataService.reset();
         this.lastScannedDirectory = rootDirectory;
         List<Path> filePaths = FileCrawler.getFiles(rootDirectory);
         taskExecutor.execute(() ->

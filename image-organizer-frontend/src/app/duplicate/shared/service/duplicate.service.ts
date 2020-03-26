@@ -23,6 +23,10 @@ export class DuplicateService extends BaseService {
     this.pollDuplicatesUntilDone();
   }
 
+  resolveDuplicate(duplicate: Duplicate): Observable<void> {
+    return this.http.post<void>(`/duplicates/${duplicate.id}/resolve`, duplicate);
+  }
+
   pollDuplicatesUntilDone() {
     const loadData = () => this.http.get<Duplicate[]>('/duplicates');
     const loadDone = () => this.http.get<Boolean>('/duplicates/done');

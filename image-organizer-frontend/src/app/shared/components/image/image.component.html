@@ -1,1 +1,3 @@
-<img *ngIf="url" [src]="url" class="image"/>
+<div class="image-container" [class.to-delete]="image.toDelete">
+  <img *ngIf="url" [src]="url" class="image"/>
+</div>
