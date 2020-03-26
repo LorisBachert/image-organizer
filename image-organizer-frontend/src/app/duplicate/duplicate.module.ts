@@ -9,6 +9,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
 import {MatCardModule} from '@angular/material/card';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -23,7 +24,8 @@ import {MatCardModule} from '@angular/material/card';
     MatIconModule,
     MatSlideToggleModule,
     FormsModule,
-    MatCardModule
+    MatCardModule,
+    MatProgressSpinnerModule
   ]
 })
 export class DuplicateModule { }

@@ -3,7 +3,6 @@
   <app-directory-select></app-directory-select>
   <ng-container *ngIf="processService.started$ | async">
     <div class="nav-links">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Gallery</a>
       <a routerLink="/duplicates" routerLinkActive="active">
         Duplicates
         <app-spinner class="spinner" *ngIf="!(duplicateService.done$ | async)"></app-spinner>

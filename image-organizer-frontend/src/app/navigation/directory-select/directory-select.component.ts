@@ -13,7 +13,8 @@ export class DirectorySelectComponent implements OnInit {
 
   processService: ProcessService;
 
-  constructor(processService: ProcessService) {
+  constructor(processService: ProcessService,
+              private router: Router) {
     this.processService = processService;
   }
 
@@ -30,7 +31,7 @@ export class DirectorySelectComponent implements OnInit {
   startProcess() {
     this.processService.startProcess(this.directory)
       .subscribe(() => {
-        console.log("Process started")
+        this.router.navigateByUrl('/duplicates');
       });
   }
 }

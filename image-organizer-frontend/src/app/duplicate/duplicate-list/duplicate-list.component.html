@@ -1,6 +1,8 @@
 <app-centered-container [vertical]="false">
   <mat-card class="action-bar">
     <h2 class="title">Duplicates ({{resolvedDuplicates()}}/{{duplicates.length}})</h2>
+    <mat-spinner [diameter]="20" *ngIf="!(duplicateService.done$ | async)"></mat-spinner>
+    <span class="spacing"></span>
     <mat-slide-toggle [(ngModel)]="showResolved" color="primary">{{showResolved ? 'Show Resolved' : 'Hide Resolved'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion>
@@ -22,7 +24,4 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
-  <p>
-    <app-spinner *ngIf="! (duplicateService.done$ | async)"></app-spinner>
-  </p>
 </app-centered-container>

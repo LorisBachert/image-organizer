@@ -4,6 +4,7 @@ import {Duplicate} from '../../shared/model/duplicate.model';
 import {MatButton} from '@angular/material/button';
 import {MatExpansionPanel} from '@angular/material/expansion';
 import {ImageService} from '../../core/image/image.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-duplicate-list',
@@ -21,7 +22,8 @@ export class DuplicateListComponent implements OnInit {
   duplicateService: DuplicateService;
 
   constructor(duplicateService: DuplicateService,
-              private imageService: ImageService) {
+              private imageService: ImageService,
+              private router: Router) {
     this.duplicateService = duplicateService; }
 
   ngOnInit(): void {
@@ -46,6 +48,9 @@ export class DuplicateListComponent implements OnInit {
         duplicate.resolved = true;
         if (this.showResolved) {
           this.selectedIndex++;
+        }
+        if (this.duplicates.every(d => d.resolved)) {
+          this.router.navigateByUrl('/trips');
         }
       });
   }

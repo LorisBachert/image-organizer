@@ -6,10 +6,8 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DuplicateModule} from './duplicate/duplicate.module';
 import {CoreModule} from './core/core.module';
-import {GalleryModule} from './gallery/gallery.module';
 import {NavigationModule} from './navigation/navigation.module';
 import {TripsModule} from './trips/trips.module';
-import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -22,7 +20,6 @@ import {MatMenuModule} from '@angular/material/menu';
     NavigationModule,
     DuplicateModule,
     CoreModule,
-    GalleryModule,
     NavigationModule,
     TripsModule
   ],
