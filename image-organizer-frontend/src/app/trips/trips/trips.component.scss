@@ -1,0 +1,15 @@
+.action-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  .title {
+    flex: 1;
+    margin: 0;
+  }
+}
+
+.drag-placeholder {
+  background-color: lighten(#303030, 5%);
+}

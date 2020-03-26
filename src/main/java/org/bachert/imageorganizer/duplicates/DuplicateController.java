@@ -22,8 +22,8 @@ public class DuplicateController {
     }
 
     @PostMapping("/{id}/resolve")
-    public void resolveDuplicate(@PathVariable Long id, @RequestBody DuplicateDTO duplicateDTO) {
-        duplicateService.resolveDuplicate(id, duplicateDTO);
+    public void resolveDuplicate(@PathVariable Long id) {
+        duplicateService.resolveDuplicate(id);
     }
 
     @GetMapping(value = "/done", produces = MediaType.TEXT_PLAIN_VALUE)

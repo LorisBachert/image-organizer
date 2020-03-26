@@ -8,9 +8,9 @@ import {FileMetadata} from '../../model/file-metadata.model';
 })
 export class ImageGridComponent implements OnInit {
 
-  @Input() images: FileMetadata[];
+  @Input() ids: number[];
 
-  @Output() imageClick = new EventEmitter<FileMetadata>();
+  @Output() imageClick = new EventEmitter<number>();
 
   constructor() {
   }

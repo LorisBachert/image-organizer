@@ -6,9 +6,7 @@ import lombok.Setter;
 import org.bachert.imageorganizer.metadata.dto.FileMetadataDTO;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor
 @Getter
@@ -19,7 +17,7 @@ public class TripDTO {
 
     private String name;
 
-    private List<FileMetadataDTO> files = new ArrayList<>();
+    private Set<Long> files = new HashSet<>();
 
     private Date startDate;
 

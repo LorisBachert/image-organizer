@@ -1,3 +1,3 @@
-<div class="image-container" [class.to-delete]="image.toDelete">
+<div class="image-container" [class.to-delete]="(image | async)?.toDelete">
   <img *ngIf="url" [src]="url" class="image"/>
 </div>

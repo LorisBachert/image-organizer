@@ -22,27 +22,23 @@ import java.util.stream.Collectors;
 @Service
 public class ImagesService {
 
-    private static final int PAGE_SIZE = 100;
-
     @Autowired
     private SessionDataService sessionDataService;
 
     @Autowired
     private FileMetadataMapper fileMetadataMapper;
 
-    public List<FileMetadataDTO> findGallery(int page) {
-        int startIndex = page * PAGE_SIZE;
-        List<FileMetadata> result = new ArrayList<>(sessionDataService.getSortedFiles());
-        result.subList(startIndex, Math.min(startIndex + PAGE_SIZE, Math.max(result.size() - 1, 0)));
-        return result.stream().map(fileMetadataMapper::toDTO).collect(Collectors.toList());
+    public List<FileMetadataDTO> findGallery() {
+        return sessionDataService.getSortedFiles().stream().map(fileMetadataMapper::toDTO).collect(Collectors.toList());
     }
 
-    public byte[] getImage(String pathString, boolean thumbnail) throws IOException {
+    public byte[] getImage(Long id, boolean thumbnail) throws IOException {
+        Path path = sessionDataService.get(id).getPath();
         if (! thumbnail) {
-            return Files.readAllBytes(Paths.get(pathString));
+            return Files.readAllBytes(path);
         } else {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            Thumbnails.of(new FileInputStream(pathString))
+            Thumbnails.of(new FileInputStream(path.toFile()))
                     .size(700, 700)
                     .keepAspectRatio(true)
                     .toOutputStream(outputStream);
@@ -52,5 +48,9 @@ public class ImagesService {
 
     public boolean isDone() {
         return sessionDataService.isDoneLoadingFiles();
+    }
+
+    public void setToDelete(Long id, boolean toDelete) {
+        sessionDataService.get(id).setToDelete(toDelete);
     }
 }

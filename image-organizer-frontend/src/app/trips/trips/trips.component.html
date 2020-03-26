@@ -1,6 +1,7 @@
 <app-centered-container [vertical]="false">
   <mat-card class="action-bar">
     <h2 class="title">Trips</h2>
+    <mat-slide-toggle [(ngModel)]="showDeleted" color="primary">{{showDeleted ? 'Show Deleted' : 'Hide Deleted'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion #accordion cdkDropListGroup>
     <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel cdkDropList (cdkDropListDropped)="drop(trip, $event)"
@@ -12,7 +13,12 @@
       </mat-expansion-panel-header>
       <ng-container *ngIf="panel.expanded">
         <div class="image-grid">
-          <app-image *ngFor="let image of trip.files; let imageIndex = index" [image]="image" cdkDrag [cdkDragData]="imageDragData(trip, image, imageIndex)"></app-image>
+          <ng-container *ngFor="let image of (getImages(trip) | async); let imageIndex = index">
+            <div *ngIf="! image.toDelete || showDeleted" cdkDrag [cdkDragData]="imageDragData(trip, image, imageIndex)">
+              <div class="drag-placeholder" *cdkDragPlaceholder></div>
+              <app-image [id]="image.id" (click)="toggleImageDeletion(image)"></app-image>
+            </div>
+          </ng-container>
         </div>
       </ng-container>
     </mat-expansion-panel>

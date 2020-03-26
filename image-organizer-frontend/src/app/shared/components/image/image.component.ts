@@ -1,6 +1,8 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FileMetadata} from '../../model/file-metadata.model';
 import {environment} from '../../../../environments/environment';
+import {ImageService} from '../../../core/image/image.service';
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-image',
@@ -9,16 +11,19 @@ import {environment} from '../../../../environments/environment';
 })
 export class ImageComponent implements OnChanges {
 
-  @Input() image: FileMetadata;
+  @Input() id: number;
+
+  image: Observable<FileMetadata> = of(null);
 
   url: string;
 
-  constructor() { }
+  constructor(private imageService: ImageService) {
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.image) {
-      const image: FileMetadata = changes.image.currentValue;
-      this.url = `${environment.api}/images?path=${image.path.replace('file:///', '')}`;
+    if (changes.id) {
+      this.image = this.imageService.images[changes.id.currentValue];
+      this.url = `${environment.api}/images/${changes.id.currentValue}`;
     }
   }
 }

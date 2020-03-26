@@ -9,7 +9,7 @@ import {GalleryService} from '../shared/service/gallery.service';
 })
 export class GalleryComponent implements OnInit {
 
-  images: FileMetadata[] = [];
+  imageIds: number[] = [];
 
   page = 0;
 
@@ -19,7 +19,7 @@ export class GalleryComponent implements OnInit {
   ngOnInit(): void {
     this.galleryService.findGallery(this.page)
       .subscribe(images => {
-        this.images.push(...images);
+        this.imageIds.push(...images.map(image => image.id));
       });
   }
 

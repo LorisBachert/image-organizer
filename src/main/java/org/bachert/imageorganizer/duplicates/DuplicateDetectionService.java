@@ -54,8 +54,8 @@ public class DuplicateDetectionService implements ImageAnalyzer {
                 }
                 if (similar(currentImage, lastImage)) {
                     state = State.DUPLICATE_DETECTED;
-                    currentDuplicate.add(file);
-                    currentDuplicate.add(lastFile);
+                    currentDuplicate.add(file.getId());
+                    currentDuplicate.add(lastFile.getId());
                 } else if (state.equals(State.DUPLICATE_DETECTED)) {
                     this.addDuplicate(currentDuplicate);
                     currentDuplicate = new Duplicate();

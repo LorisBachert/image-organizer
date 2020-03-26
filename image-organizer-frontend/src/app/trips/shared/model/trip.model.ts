@@ -1,9 +1,7 @@
-import {FileMetadata} from '../../../shared/model/file-metadata.model';
-
 export class Trip {
   id: number;
   name: string;
-  files: FileMetadata[];
+  files: number[];
   startDate: Date;
   endDate: Date;
   city: string;

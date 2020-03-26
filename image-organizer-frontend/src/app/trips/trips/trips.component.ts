@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {TripService} from '../shared/service/trip.service';
 import {Trip} from '../shared/model/trip.model';
 import {DateService} from '../../shared/service/date.service';
-import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 import {FileMetadata} from '../../shared/model/file-metadata.model';
 import * as arrayMove from 'array-move';
+import {ImageService} from '../../core/image/image.service';
+import {combineLatest, Observable} from 'rxjs';
 
 class ImageDragData {
   trip: Trip;
@@ -25,8 +27,11 @@ export class TripsComponent implements OnInit {
 
   dateService: DateService;
 
+  showDeleted = false;
+
   constructor(tripService: TripService,
-              dateService: DateService) {
+              dateService: DateService,
+              private imageService: ImageService) {
     this.tripService = tripService;
     this.dateService = dateService;
   }
@@ -47,13 +52,13 @@ export class TripsComponent implements OnInit {
       })
   }
 
-  drop(newTrip: Trip, $event: CdkDragDrop<FileMetadata[], any>) {
+  drop(newTrip: Trip, $event: CdkDragDrop<number[], any>) {
     if ($event.previousContainer.id !== $event.container.id) {
       const data: ImageDragData = $event.item.data;
       data.trip.files.splice(data.imageIndex, 1);
-      newTrip.files.push(data.image);
+      newTrip.files.push(data.image.id);
     } else if ($event.previousIndex !== $event.currentIndex) {
-      arrayMove.mutate(newTrip.files, $event.previousIndex, $event.currentIndex);
+      moveItemInArray(newTrip.files, $event.previousIndex, $event.currentIndex);
     }
   }
 
@@ -63,5 +68,13 @@ export class TripsComponent implements OnInit {
       image,
       imageIndex
     }
+  }
+
+  getImages(trip: Trip): Observable<FileMetadata[]> {
+    return combineLatest(trip.files.map(id => this.imageService.images[id]));
+  }
+
+  toggleImageDeletion(image: FileMetadata) {
+    this.imageService.toggleDeletion(image.id);
   }
 }

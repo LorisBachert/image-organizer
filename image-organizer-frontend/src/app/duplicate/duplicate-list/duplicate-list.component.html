@@ -8,12 +8,12 @@
         [expanded]="selectedIndex === index" [id]="'panel-' + index">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Duplicate ({{keptFiles(duplicate)}}/{{duplicate.files.length}})
+          Duplicate
           <mat-icon *ngIf="duplicate.resolved" class="title-check-icon">check</mat-icon>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-container *ngIf="panel.expanded">
-        <app-image-grid [images]="duplicate.files" (imageClick)="$event.toDelete = ! $event.toDelete"></app-image-grid>
+        <app-image-grid [ids]="duplicate.files" (imageClick)="toggleImageDeletion($event)"></app-image-grid>
       </ng-container>
       <div class="button-bar duplicate-button-bar">
         <button mat-raised-button (click)="markAllForDeletion(duplicate, false)">Keep All (A)</button>

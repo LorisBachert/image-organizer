@@ -15,7 +15,7 @@ public class DuplicateDTO {
 
     private Long id;
 
-    private Set<FileMetadataDTO> files = new HashSet<>();
+    private Set<Long> files = new HashSet<>();
 
     private boolean resolved;
 }

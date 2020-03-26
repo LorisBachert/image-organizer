@@ -9,6 +9,7 @@ import {ProcessState} from '../model/process-state.model';
 import {DuplicateService} from '../../../duplicate/shared/service/duplicate.service';
 import {tap} from 'rxjs/operators';
 import {TripService} from '../../../trips/shared/service/trip.service';
+import {ImageService} from '../../../core/image/image.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class ProcessService {
 
   constructor(private http: HttpClient,
               private duplicateService: DuplicateService,
-              private tripService: TripService) {
+              private tripService: TripService,
+              private imageService: ImageService) {
   }
 
   public startProcess(directory: string): Observable<StartProcessResult> {
@@ -49,5 +51,6 @@ export class ProcessService {
     this.started$.next(true);
     this.duplicateService.start();
     this.tripService.start();
+    this.imageService.start();
   }
 }

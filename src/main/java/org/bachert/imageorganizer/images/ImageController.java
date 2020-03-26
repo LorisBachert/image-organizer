@@ -18,18 +18,23 @@ public class ImageController {
     @Autowired
     private ImagesService imagesService;
 
-    @GetMapping(value = "/gallery")
-    public List<FileMetadataDTO> findGallery(@RequestParam int page) throws InterruptedException {
-        return imagesService.findGallery(page);
+    @GetMapping
+    public List<FileMetadataDTO> findGallery() throws InterruptedException {
+        return imagesService.findGallery();
     }
 
-    @GetMapping
-    public @ResponseBody byte[] getImage(@RequestParam String path, @RequestParam(required = false, defaultValue = "true") boolean thumbnail) throws IOException {
-        return imagesService.getImage(path, thumbnail);
+    @GetMapping("/{id}")
+    public @ResponseBody byte[] getImage(@PathVariable Long id, @RequestParam(required = false, defaultValue = "true") boolean thumbnail) throws IOException {
+        return imagesService.getImage(id, thumbnail);
     }
 
     @GetMapping(value = "/done", produces = MediaType.TEXT_PLAIN_VALUE)
     public @ResponseBody String isDone() {
         return String.valueOf(imagesService.isDone());
+    }
+
+    @PostMapping("/{id}/delete")
+    public void setToDelete(@PathVariable Long id, @RequestParam boolean toDelete) {
+        imagesService.setToDelete(id, toDelete);
     }
 }

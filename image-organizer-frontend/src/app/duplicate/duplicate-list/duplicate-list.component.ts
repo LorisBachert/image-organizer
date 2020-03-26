@@ -3,6 +3,7 @@ import {DuplicateService} from '../shared/service/duplicate.service';
 import {Duplicate} from '../../shared/model/duplicate.model';
 import {MatButton} from '@angular/material/button';
 import {MatExpansionPanel} from '@angular/material/expansion';
+import {ImageService} from '../../core/image/image.service';
 
 @Component({
   selector: 'app-duplicate-list',
@@ -19,7 +20,8 @@ export class DuplicateListComponent implements OnInit {
 
   duplicateService: DuplicateService;
 
-  constructor(duplicateService: DuplicateService) {
+  constructor(duplicateService: DuplicateService,
+              private imageService: ImageService) {
     this.duplicateService = duplicateService; }
 
   ngOnInit(): void {
@@ -49,11 +51,7 @@ export class DuplicateListComponent implements OnInit {
   }
 
   markAllForDeletion(duplicate: Duplicate, toDelete: boolean) {
-    duplicate.files.forEach(file => file.toDelete = toDelete);
-  }
-
-  keptFiles(duplicate: Duplicate) {
-    return duplicate.files.filter(f => !f.toDelete).length;
+    duplicate.files.forEach(file => this.imageService.markForDeletion(file, toDelete));
   }
 
   findDuplicatesToDisplay(): Duplicate[] {
@@ -66,9 +64,9 @@ export class DuplicateListComponent implements OnInit {
     const duplicate = this.duplicates[this.selectedIndex];
     if (isNumberKey) {
       const index = +$event.key - 1;
-      const file = duplicate.files[index];
+      const file: number = duplicate.files[index];
       if (file) {
-        file.toDelete = !file.toDelete;
+        this.imageService.toggleDeletion(file);
       }
     } else if ($event.key === 'ArrowLeft') {
       this.selectedIndex = Math.max(-1, this.selectedIndex - 1);
@@ -98,5 +96,9 @@ export class DuplicateListComponent implements OnInit {
       const panelRef = document.getElementById('panel-' + index);
       panelRef.scrollIntoView({ behavior: 'smooth' });
     }, 50);
+  }
+
+  toggleImageDeletion(imageId: number) {
+    this.imageService.toggleDeletion(imageId)
   }
 }
