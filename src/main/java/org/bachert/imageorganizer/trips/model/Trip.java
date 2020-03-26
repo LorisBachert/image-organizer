@@ -16,6 +16,8 @@ public class Trip {
 
     private Long id;
 
+    private String name;
+
     private List<FileMetadata> files = new ArrayList<>();
 
     private Date startDate;

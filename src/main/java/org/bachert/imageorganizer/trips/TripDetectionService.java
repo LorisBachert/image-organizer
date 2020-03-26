@@ -9,12 +9,17 @@ import org.bachert.imageorganizer.session.SessionDataService;
 import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
 public class TripDetectionService implements ImageAnalyzer {
+
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
     private static final int TRIP_DISTANCE = 10 * 1000; // 10 km
 
@@ -30,21 +35,32 @@ public class TripDetectionService implements ImageAnalyzer {
         FileMetadata lastFileMetadata = null;
         for (FileMetadata file : files) {
             if (isNewTrip(file, lastFileMetadata)) {
-                geoLocationService.getCountryAndCity(trip);
-                sessionDataService.addTrip(trip);
+                addTrip(trip);
                 trip = new Trip();
             }
             trip.addFile(file);
             lastFileMetadata = file;
         }
-        geoLocationService.getCountryAndCity(trip);
-        sessionDataService.addTrip(trip);
+        addTrip(trip);
         sessionDataService.setDoneDetectingTrips(true);
     }
 
+    private void addTrip(Trip trip) {
+        geoLocationService.getCountryAndCity(trip);
+        trip.setName(getName(trip));
+        sessionDataService.addTrip(trip);
+    }
 
     private static boolean isNewTrip(FileMetadata currentFile, FileMetadata lastFile) {
-        return lastFile != null && distance(currentFile.getGeoLocation(), lastFile.getGeoLocation()) > TRIP_DISTANCE;
+        return lastFile != null &&
+                (atMost36HoursDiff(currentFile, lastFile) ||
+                        distance(currentFile.getGeoLocation(), lastFile.getGeoLocation()) > TRIP_DISTANCE);
+    }
+
+    private static boolean atMost36HoursDiff(FileMetadata currentFile, FileMetadata lastFile) {
+        long diffInMillis = currentFile.getCreationDate().getTime() - lastFile.getCreationDate().getTime();
+        long diffInHours = TimeUnit.HOURS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+        return diffInHours > 36;
     }
 
     private static float distance(GeoLocation loc1, GeoLocation loc2) {
@@ -59,5 +75,20 @@ public class TripDetectionService implements ImageAnalyzer {
                         Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return (float) (earthRadius * c);
+    }
+
+    private static String getName(Trip trip) {
+        long diffInMillis = trip.getEndDate().getTime() - trip.getStartDate().getTime();
+        long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+        boolean isSameDay = diffInDays == 1;
+        StringBuilder builder = new StringBuilder();
+        builder.append(DATE_FORMAT.format(trip.getStartDate()));
+        if (!isSameDay) {
+            builder.append(" - ").append(DATE_FORMAT.format(trip.getEndDate()));
+        }
+        if (!StringUtils.isEmpty(trip.getCity())) {
+            builder.append(": ").append(trip.getCity());
+        }
+        return builder.toString();
     }
 }

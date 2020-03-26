@@ -2,6 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import {TripService} from '../shared/service/trip.service';
 import {Trip} from '../shared/model/trip.model';
 import {DateService} from '../../shared/service/date.service';
+import {CdkDragDrop} from '@angular/cdk/drag-drop';
+import {FileMetadata} from '../../shared/model/file-metadata.model';
+import * as arrayMove from 'array-move';
+
+class ImageDragData {
+  trip: Trip;
+  image: FileMetadata;
+  imageIndex: number;
+}
 
 @Component({
   selector: 'app-trips',
@@ -38,4 +47,21 @@ export class TripsComponent implements OnInit {
       })
   }
 
+  drop(newTrip: Trip, $event: CdkDragDrop<FileMetadata[], any>) {
+    if ($event.previousContainer.id !== $event.container.id) {
+      const data: ImageDragData = $event.item.data;
+      data.trip.files.splice(data.imageIndex, 1);
+      newTrip.files.push(data.image);
+    } else if ($event.previousIndex !== $event.currentIndex) {
+      arrayMove.mutate(newTrip.files, $event.previousIndex, $event.currentIndex);
+    }
+  }
+
+  imageDragData(trip: Trip, image: FileMetadata, imageIndex: number): ImageDragData {
+    return {
+      trip,
+      image,
+      imageIndex
+    }
+  }
 }

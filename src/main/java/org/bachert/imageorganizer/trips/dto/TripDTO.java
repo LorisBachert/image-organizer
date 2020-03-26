@@ -17,6 +17,8 @@ public class TripDTO {
 
     private Long id;
 
+    private String name;
+
     private List<FileMetadataDTO> files = new ArrayList<>();
 
     private Date startDate;

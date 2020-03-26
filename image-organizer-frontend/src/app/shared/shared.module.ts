@@ -6,6 +6,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {HttpClientModule} from '@angular/common/http';
 import { ImageComponent } from './components/image/image.component';
 import { ImageGridComponent } from './components/image-grid/image-grid.component';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { ImageGridComponent } from './components/image-grid/image-grid.component
   imports: [
     CommonModule,
     MatProgressSpinnerModule,
-    HttpClientModule
+    HttpClientModule,
+    DragDropModule
   ]
 })
 export class SharedModule {

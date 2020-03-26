@@ -4,6 +4,7 @@ import { TripsComponent } from './trips/trips.component';
 import {SharedModule} from '../shared/shared.module';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 
@@ -13,7 +14,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     CommonModule,
     SharedModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    DragDropModule
   ]
 })
 export class TripsModule { }

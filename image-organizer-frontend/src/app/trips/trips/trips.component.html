@@ -2,15 +2,18 @@
   <mat-card class="action-bar">
     <h2 class="title">Trips</h2>
   </mat-card>
-  <mat-accordion>
-    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel>
+  <mat-accordion #accordion cdkDropListGroup>
+    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel cdkDropList (cdkDropListDropped)="drop(trip, $event)"
+                         [cdkDropListData]="trip.files">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{dateService.format(trip.startDate)}} - {{dateService.format(trip.endDate)}}: {{trip.city}}, {{trip.country}}
+          {{trip.name}}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-container *ngIf="panel.expanded">
-        <app-image-grid [images]="trip.files"></app-image-grid>
+        <div class="image-grid">
+          <app-image *ngFor="let image of trip.files; let imageIndex = index" [image]="image" cdkDrag [cdkDragData]="imageDragData(trip, image, imageIndex)"></app-image>
+        </div>
       </ng-container>
     </mat-expansion-panel>
   </mat-accordion>

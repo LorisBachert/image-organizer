@@ -11,3 +11,10 @@ body { height: 100%; margin: 0; font-family: Roboto, "Helvetica Neue", sans-seri
     margin-right: .5rem;
   }
 }
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-auto-rows: 300px;
+  grid-gap: 10px;
+}
