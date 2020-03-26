@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bachert.imageorganizer.analyzer.ImageAnalyzer;
 import org.bachert.imageorganizer.geolocation.GeoLocationService;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
+import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
 import org.bachert.imageorganizer.session.SessionDataService;
 import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ public class TripDetectionService implements ImageAnalyzer {
 
     @Override
     public void accept(List<FileMetadata> files) {
+        files.sort(new FileMetadataComparator());
         Trip trip = new Trip();
         FileMetadata lastFileMetadata = null;
         for (FileMetadata file : files) {

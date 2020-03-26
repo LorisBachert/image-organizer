@@ -6,6 +6,7 @@ import org.bachert.imageorganizer.duplicates.mapper.DuplicateMapper;
 import org.bachert.imageorganizer.duplicates.model.Duplicate;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.duplicates.dto.DuplicateDTO;
+import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
 import org.bachert.imageorganizer.session.SessionDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class DuplicateDetectionService implements ImageAnalyzer {
 
     @Override
     public void accept(List<FileMetadata> files) {
+        files.sort(new FileMetadataComparator());
         state = State.NO_DUPLICATE;
         Duplicate currentDuplicate = new Duplicate();
         BufferedImage lastImage = null;
