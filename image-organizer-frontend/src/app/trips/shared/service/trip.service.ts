@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from '../../../shared/service/base.service';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {Trip} from '../model/trip.model';
 
@@ -31,5 +31,9 @@ export class TripService extends BaseService {
         this.trips$.next(trips);
       }, () => {
       }, () => this.done$.next(true));
+  }
+
+  update(trip: Trip): Observable<void> {
+    return this.http.put<void>(`/trips/${trip.id}`, trip);
   }
 }

@@ -52,13 +52,20 @@ export class TripsComponent implements OnInit {
       })
   }
 
-  drop(newTrip: Trip, $event: CdkDragDrop<number[], any>) {
+  drop(trip: Trip, $event: CdkDragDrop<number[], any>) {
+    let changed = false;
     if ($event.previousContainer.id !== $event.container.id) {
       const data: ImageDragData = $event.item.data;
       data.trip.files.splice(data.imageIndex, 1);
-      newTrip.files.push(data.image.id);
+      trip.files.push(data.image.id);
+      changed = true;
     } else if ($event.previousIndex !== $event.currentIndex) {
-      moveItemInArray(newTrip.files, $event.previousIndex, $event.currentIndex);
+      moveItemInArray(trip.files, $event.previousIndex, $event.currentIndex);
+      changed = true;
+    }
+    if (changed) {
+      this.tripService.update(trip)
+        .subscribe(() => {})
     }
   }
 
@@ -76,5 +83,11 @@ export class TripsComponent implements OnInit {
 
   toggleImageDeletion(image: FileMetadata) {
     this.imageService.toggleDeletion(image.id);
+  }
+
+  update(trip: Trip, $event: any) {
+    $event.preventDefault();
+    this.tripService.update(trip)
+      .subscribe(() => {});
   }
 }

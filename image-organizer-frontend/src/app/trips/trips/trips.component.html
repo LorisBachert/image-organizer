@@ -4,14 +4,20 @@
     <mat-slide-toggle [(ngModel)]="showDeleted" color="primary">{{showDeleted ? 'Show Deleted' : 'Hide Deleted'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion #accordion cdkDropListGroup>
-    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel cdkDropList (cdkDropListDropped)="drop(trip, $event)"
-                         [cdkDropListData]="trip.files">
+    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel cdkDropList
+                         (cdkDropListDropped)="drop(trip, $event)" [cdkDropListData]="trip.files">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{trip.name}}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-container *ngIf="panel.expanded">
+        <form (ngSubmit)="update(trip, $event)" #form="ngForm">
+          <mat-form-field>
+            <input matInput [(ngModel)]="trip.name" required name="tripName"/>
+            <button *ngIf="form.dirty" mat-raised-button color="primary" matSuffix [disabled]="form.invalid">Save</button>
+          </mat-form-field>
+        </form>
         <div class="image-grid">
           <ng-container *ngFor="let image of (getImages(trip) | async); let imageIndex = index">
             <div *ngIf="! image.toDelete || showDeleted" cdkDrag [cdkDragData]="imageDragData(trip, image, imageIndex)">

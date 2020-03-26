@@ -7,6 +7,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {FormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatButtonModule} from '@angular/material/button';
 
 
 
@@ -19,7 +21,9 @@ import {FormsModule} from '@angular/forms';
     MatExpansionModule,
     DragDropModule,
     MatSlideToggleModule,
-    FormsModule
+    FormsModule,
+    MatInputModule,
+    MatButtonModule
   ]
 })
 export class TripsModule { }

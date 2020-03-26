@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -16,7 +14,7 @@ public class Trip {
 
     private String name;
 
-    private Set<Long> files = new HashSet<>();
+    private List<Long> files = new ArrayList<>();
 
     private Date startDate;
 
@@ -36,6 +34,11 @@ public class Trip {
                 endDate = file.getCreationDate();
             }
         }
+    }
+
+    public void updateFiles(List<FileMetadata> files) {
+        this.files.clear();
+        files.forEach(this::addFile);
     }
 
     @Override

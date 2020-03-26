@@ -3,10 +3,10 @@ package org.bachert.imageorganizer.trips.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.bachert.imageorganizer.metadata.dto.FileMetadataDTO;
-import org.bachert.imageorganizer.metadata.model.FileMetadata;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -17,7 +17,7 @@ public class TripDTO {
 
     private String name;
 
-    private Set<Long> files = new HashSet<>();
+    private List<Long> files = new ArrayList<>();
 
     private Date startDate;
 

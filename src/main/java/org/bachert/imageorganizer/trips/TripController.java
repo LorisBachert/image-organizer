@@ -20,6 +20,11 @@ public class TripController {
         return tripService.getTrips();
     }
 
+    @PutMapping("/{id}")
+    public void update(@PathVariable Long id, @RequestBody TripDTO trip) {
+        tripService.update(id, trip);
+    }
+
     @GetMapping(value = "/done", produces = MediaType.TEXT_PLAIN_VALUE)
     public @ResponseBody
     String isDone() {
