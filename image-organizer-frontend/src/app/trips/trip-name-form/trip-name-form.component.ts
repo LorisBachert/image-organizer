@@ -8,18 +8,14 @@ import {TripService} from '../shared/service/trip.service';
   templateUrl: './trip-name-form.component.html',
   styleUrls: ['./trip-name-form.component.scss']
 })
-export class TripNameFormComponent implements OnInit {
+export class TripNameFormComponent {
 
   @Input() trip: Trip;
 
   constructor(private tripService: TripService) { }
 
-  ngOnInit(): void {
-  }
-
   update(trip: Trip, form: NgForm, $event: any) {
     $event.preventDefault();
-    $event.stopPropagation();
     this.tripService.update(trip)
       .subscribe(() => {
         form.form.markAsPristine();
