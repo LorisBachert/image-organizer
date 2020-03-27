@@ -43,6 +43,10 @@ public class IOService {
     }
 
     public static void moveFiles(String rootDirectory, Gallery gallery, List<FileMetadata> files) {
+        if (files.isEmpty()) {
+            log.info("Gallery {} contains no files", gallery.getName());
+            return;
+        }
         log.info("Moving files for gallery: {}", gallery.getName());
         String galleryDirectoryPath = String.format(GALLERY_DIRECTORY_PATTERN, rootDirectory, gallery.getName());
         File galleryDirectory = new File(galleryDirectoryPath);
