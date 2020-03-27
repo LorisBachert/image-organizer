@@ -1,5 +1,6 @@
 package org.bachert.imageorganizer.process;
 
+import org.bachert.imageorganizer.process.dto.ProcessConfigurationDTO;
 import org.bachert.imageorganizer.process.dto.ProcessStateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,8 +14,8 @@ public class ProcessController {
     private ProcessService processService;
 
     @PostMapping("/start")
-    public void startProcess(@RequestParam String directory) {
-        processService.process(directory);
+    public void startProcess(@RequestBody ProcessConfigurationDTO configuration) {
+        processService.process(configuration);
     }
 
     @GetMapping("/state")

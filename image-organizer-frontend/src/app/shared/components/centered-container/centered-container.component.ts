@@ -11,6 +11,8 @@ export class CenteredContainerComponent {
 
   @Input() horizontal = true;
 
+  @Input() small = false;
+
   constructor() {
   }
 

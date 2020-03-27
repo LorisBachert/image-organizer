@@ -1,6 +1,5 @@
 <nav class="navigation">
   <a routerLink="/"><h1 class="title">Image Organizer</h1></a>
-  <app-directory-select></app-directory-select>
   <ng-container *ngIf="processService.started$ | async">
     <div class="nav-links">
       <a routerLink="/duplicates" routerLinkActive="active">

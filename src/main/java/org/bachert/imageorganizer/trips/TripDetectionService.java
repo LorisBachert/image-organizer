@@ -6,6 +6,7 @@ import org.bachert.imageorganizer.analyzer.ImageAnalyzer;
 import org.bachert.imageorganizer.geolocation.GeoLocationService;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
+import org.bachert.imageorganizer.process.dto.ProcessConfigurationDTO;
 import org.bachert.imageorganizer.session.SessionDataService;
 import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +23,6 @@ public class TripDetectionService implements ImageAnalyzer {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
-    private static final int TRIP_DISTANCE = 10 * 1000; // 10 km
-
     @Autowired
     private SessionDataService sessionDataService;
 
@@ -31,12 +30,16 @@ public class TripDetectionService implements ImageAnalyzer {
     private GeoLocationService geoLocationService;
 
     @Override
-    public void accept(List<FileMetadata> files) {
+    public void accept(List<FileMetadata> files, ProcessConfigurationDTO configuration) {
+        if (! configuration.getTrips().isEnabled()) {
+            sessionDataService.setDoneDetectingTrips(true);
+            return;
+        }
         files.sort(new FileMetadataComparator());
         Trip trip = new Trip();
         FileMetadata lastFileMetadata = null;
         for (FileMetadata file : files) {
-            if (isNewTrip(file, lastFileMetadata)) {
+            if (isNewTrip(file, lastFileMetadata, configuration)) {
                 addTrip(trip);
                 trip = new Trip();
             }
@@ -53,16 +56,16 @@ public class TripDetectionService implements ImageAnalyzer {
         sessionDataService.addTrip(trip);
     }
 
-    private static boolean isNewTrip(FileMetadata currentFile, FileMetadata lastFile) {
+    private static boolean isNewTrip(FileMetadata currentFile, FileMetadata lastFile, ProcessConfigurationDTO configuration) {
         return lastFile != null &&
-                (atMost36HoursDiff(currentFile, lastFile) ||
-                        distance(currentFile.getGeoLocation(), lastFile.getGeoLocation()) > TRIP_DISTANCE);
+                (atMostHoursDiff(currentFile, lastFile, configuration.getTrips().getHoursBetween()) ||
+                        distance(currentFile.getGeoLocation(), lastFile.getGeoLocation()) > configuration.getTrips().getDistance());
     }
 
-    private static boolean atMost36HoursDiff(FileMetadata currentFile, FileMetadata lastFile) {
+    private static boolean atMostHoursDiff(FileMetadata currentFile, FileMetadata lastFile, double hoursBetween) {
         long diffInMillis = currentFile.getCreationDate().getTime() - lastFile.getCreationDate().getTime();
         long diffInHours = TimeUnit.HOURS.convert(diffInMillis, TimeUnit.MILLISECONDS);
-        return diffInHours > 36;
+        return diffInHours > hoursBetween;
     }
 
     private static float distance(GeoLocation loc1, GeoLocation loc2) {

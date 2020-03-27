@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {Duplicate} from '../../../shared/model/duplicate.model';
-import {FileMetadata} from '../../../shared/model/file-metadata.model';
-import {CrawlFileResult} from '../../../shared/model/crawl-file-result.model';
+import {Duplicate} from '../../shared/model/duplicate.model';
+import {FileMetadata} from '../../shared/model/file-metadata.model';
+import {CrawlFileResult} from '../../shared/model/crawl-file-result.model';
 import {StartProcessResult} from '../model/start-process-result.model';
 import {ProcessState} from '../model/process-state.model';
-import {DuplicateService} from '../../../duplicate/shared/service/duplicate.service';
+import {DuplicateService} from '../../duplicate/shared/service/duplicate.service';
 import {tap} from 'rxjs/operators';
-import {TripService} from '../../../trips/shared/service/trip.service';
-import {ImageService} from '../../../core/image/image.service';
+import {TripService} from '../../trips/shared/service/trip.service';
+import {ImageService} from '../image/image.service';
+import {Configuration} from '../../home/shared/model/configuration.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,12 +25,8 @@ export class ProcessService {
               private imageService: ImageService) {
   }
 
-  public startProcess(directory: string): Observable<StartProcessResult> {
-    return this.http.post<StartProcessResult>('/process/start', null, {
-      params: {
-        directory
-      }
-    }).pipe(
+  public startProcess(config: Configuration): Observable<StartProcessResult> {
+    return this.http.post<StartProcessResult>('/process/start', config).pipe(
       tap(() => {
         this.initialize();
       })

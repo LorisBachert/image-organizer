@@ -5,6 +5,7 @@ import org.bachert.imageorganizer.filter.FilterService;
 import org.bachert.imageorganizer.io.IOService;
 import org.bachert.imageorganizer.metadata.MetadataExpanderService;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
+import org.bachert.imageorganizer.process.dto.ProcessConfigurationDTO;
 import org.bachert.imageorganizer.process.dto.ProcessStateDTO;
 import org.bachert.imageorganizer.process.dto.StartProcessResultDTO;
 import org.bachert.imageorganizer.session.SessionDataService;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Flux;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,12 +37,12 @@ public class ProcessService {
     @Autowired
     private SessionDataService sessionDataService;
 
-    private String lastScannedDirectory;
+    private ProcessConfigurationDTO configuration;
 
-    public StartProcessResultDTO process(String rootDirectory) {
+    public StartProcessResultDTO process(ProcessConfigurationDTO configuration) {
         this.sessionDataService.reset();
-        this.lastScannedDirectory = rootDirectory;
-        List<Path> filePaths = IOService.getFiles(rootDirectory);
+        this.configuration = configuration;
+        List<Path> filePaths = IOService.getFiles(configuration.getDirectory());
         taskExecutor.execute(() ->
                 Flux.fromIterable(filePaths)
                         .map(FileMetadata::new)
@@ -49,13 +51,14 @@ public class ProcessService {
                         .doOnNext(sessionDataService::add)
                         .collect(Collectors.toList())
                         .doOnNext((files) -> sessionDataService.setDoneLoadingFiles(true))
-                        .subscribe(imageAnalyzerService::analyze)
+                        .subscribe(files -> imageAnalyzerService.analyze(files, configuration))
         );
         return new StartProcessResultDTO(filePaths.size());
     }
 
     public ProcessStateDTO getState() {
-        return new ProcessStateDTO(lastScannedDirectory != null, lastScannedDirectory);
+        Optional<ProcessConfigurationDTO> configuration = Optional.ofNullable(this.configuration);
+        return new ProcessStateDTO(configuration.isPresent(), configuration.map(ProcessConfigurationDTO::getDirectory).orElse(null));
     }
 
     public void end() {
@@ -64,7 +67,7 @@ public class ProcessService {
                     .map(sessionDataService::get)
                     .filter(file -> !file.isToDelete())
                     .collect(Collectors.toList());
-            IOService.moveFiles(lastScannedDirectory, trip, files);
+            IOService.moveFiles(configuration.getDirectory(), trip, files);
         });
     }
 }

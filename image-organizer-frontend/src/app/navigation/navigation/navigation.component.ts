@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DuplicateService} from '../../duplicate/shared/service/duplicate.service';
-import {ProcessService} from '../shared/service/process.service';
+import {ProcessService} from '../../core/process/process.service';
 import {TripService} from '../../trips/shared/service/trip.service';
 
 @Component({

@@ -7,6 +7,7 @@ import org.bachert.imageorganizer.duplicates.model.Duplicate;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.duplicates.dto.DuplicateDTO;
 import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
+import org.bachert.imageorganizer.process.dto.ProcessConfigurationDTO;
 import org.bachert.imageorganizer.session.SessionDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,11 @@ public class DuplicateDetectionService implements ImageAnalyzer {
     private SessionDataService sessionDataService;
 
     @Override
-    public void accept(List<FileMetadata> files) {
+    public void accept(List<FileMetadata> files, ProcessConfigurationDTO configuration) {
+        if (! configuration.getDuplicates().isEnabled()) {
+            sessionDataService.setDoneDetectingDuplicates(true);
+            return;
+        }
         files.sort(new FileMetadataComparator());
         state = State.NO_DUPLICATE;
         Duplicate currentDuplicate = new Duplicate();
@@ -54,7 +59,7 @@ public class DuplicateDetectionService implements ImageAnalyzer {
                 if (lastImage == null) {
                     lastImage = ImageIO.read(lastFile.getPath().toFile());
                 }
-                if (similar(currentImage, lastImage)) {
+                if (similar(currentImage, lastImage, configuration.getDuplicates().getDiff())) {
                     state = State.DUPLICATE_DETECTED;
                     currentDuplicate.add(file.getId());
                     currentDuplicate.add(lastFile.getId());
@@ -92,9 +97,9 @@ public class DuplicateDetectionService implements ImageAnalyzer {
         return sameDimensions && createdWithin5Seconds;
     }
 
-    private static boolean similar(BufferedImage file1, BufferedImage file2) {
+    private static boolean similar(BufferedImage file1, BufferedImage file2, double diff) {
         try {
-            Boolean result = getDifferencePercent(file1, file2).map(differencePercentage -> differencePercentage < 10).orElse(false);
+            Boolean result = getDifferencePercent(file1, file2).map(differencePercentage -> differencePercentage < diff).orElse(false);
             if (result) {
                 log.debug("Files are similar");
             } else {

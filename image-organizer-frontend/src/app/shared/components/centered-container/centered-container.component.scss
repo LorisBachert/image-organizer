@@ -16,6 +16,10 @@
     padding: 1rem;
     width: 100%;
     max-width: 1600px;
+
+    &.small {
+      max-width: 500px;
+    }
   }
 
   &:not(.vertical) {
