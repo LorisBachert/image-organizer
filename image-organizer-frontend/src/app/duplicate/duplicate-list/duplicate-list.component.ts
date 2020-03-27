@@ -5,6 +5,7 @@ import {MatButton} from '@angular/material/button';
 import {MatExpansionPanel} from '@angular/material/expansion';
 import {ImageService} from '../../core/image/image.service';
 import {Router} from '@angular/router';
+import {Gallery} from '../../galleries/shared/model/gallery.model';
 
 @Component({
   selector: 'app-duplicate-list',
@@ -49,61 +50,32 @@ export class DuplicateListComponent implements OnInit {
         if (this.showResolved) {
           this.selectedIndex++;
         }
-        if (this.duplicates.every(d => d.resolved)) {
+        if (this.duplicates.every(d => d.resolved) && this.selectedIndex >= this.duplicates.length) {
           this.router.navigateByUrl('/galleries');
         }
       });
-  }
-
-  markAllForDeletion(duplicate: Duplicate, toDelete: boolean) {
-    duplicate.files.forEach(file => this.imageService.markForDeletion(file, toDelete));
   }
 
   findDuplicatesToDisplay(): Duplicate[] {
     return this.duplicates.filter(duplicate => !duplicate.resolved || this.showResolved);
   }
 
-  @HostListener('window:keyup', ['$event'])
-  keyUp($event: KeyboardEvent) {
-    let isNumberKey = ! isNaN(+$event.key);
-    const duplicate = this.duplicates[this.selectedIndex];
-    if (isNumberKey) {
-      const index = +$event.key - 1;
-      const file: number = duplicate.files[index];
-      if (file) {
-        this.imageService.toggleDeletion(file);
-      }
-    } else if ($event.key === 'ArrowLeft') {
-      this.selectedIndex = Math.max(-1, this.selectedIndex - 1);
-    } else if ($event.key === 'ArrowRight') {
-      this.selectedIndex = Math.min(this.findDuplicatesToDisplay().length, this.selectedIndex + 1);
-    } else if ($event.key.toLowerCase() === 'a') {
-      this.markAllForDeletion(duplicate, false);
-    } else if ($event.key.toLowerCase() === 'd') {
-      this.markAllForDeletion(duplicate, true);
-    }
-  }
-
-  focus(resolve: MatButton) {
-    // needs a little timeout to work properly
-    setTimeout(() => resolve.focus(), 50);
-  }
-
   resolvedDuplicates() {
     return this.duplicates.filter(d => d.resolved).length;
   }
 
-  opened(resolve: MatButton, index: number) {
-    this.selectedIndex = index;
-    // needs a little timeout to work properly
-    setTimeout(() => {
-      resolve.focus();
-      const panelRef = document.getElementById('panel-' + index);
-      panelRef.scrollIntoView({ behavior: 'smooth' });
-    }, 50);
+  toGallery(duplicate: Duplicate): Gallery {
+    return {
+      name: 'Duplicate',
+      files: duplicate.files
+    } as Gallery;
   }
 
-  toggleImageDeletion(imageId: number) {
-    this.imageService.toggleDeletion(imageId)
+  next() {
+    this.resolveDuplicate(this.duplicates[this.selectedIndex]);
+  }
+
+  previous() {
+    this.selectedIndex = Math.max(0, this.selectedIndex - 1);
   }
 }

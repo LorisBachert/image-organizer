@@ -6,4 +6,5 @@ export class Gallery {
   endDate: Date;
   city: string;
   country: string;
+  favorite: boolean;
 }

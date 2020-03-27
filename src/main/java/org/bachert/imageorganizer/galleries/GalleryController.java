@@ -20,9 +20,14 @@ public class GalleryController {
         return galleryService.getGalleries();
     }
 
+    @PostMapping
+    public GalleryDTO create(@RequestBody GalleryDTO gallery) {
+        return galleryService.create(gallery);
+    }
+
     @PutMapping("/{id}")
-    public void update(@PathVariable Long id, @RequestBody GalleryDTO trip) {
-        galleryService.update(id, trip);
+    public void update(@PathVariable Long id, @RequestBody GalleryDTO gallery) {
+        galleryService.update(id, gallery);
     }
 
     @GetMapping(value = "/done", produces = MediaType.TEXT_PLAIN_VALUE)

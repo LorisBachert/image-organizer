@@ -19,6 +19,8 @@ export class GalleriesComponent implements OnInit {
 
   showDeleted = true;
 
+  newGalleryName: string;
+
   constructor(private galleriesService: GalleriesService) {
   }
 
@@ -44,5 +46,18 @@ export class GalleriesComponent implements OnInit {
 
   nextGallery() {
     this.selectedIndex = Math.min(this.galleries.length - 1, this.selectedIndex + 1);
+  }
+
+  addGallery() {
+    this.galleriesService.create(this.newGalleryName)
+      .subscribe(gallery => {
+        this.newGalleryName = '';
+      })
+  }
+
+  toggleFavorite(gallery: Gallery) {
+    gallery.favorite = ! gallery.favorite;
+    this.galleriesService.update(gallery)
+      .subscribe(() => {});
   }
 }

@@ -24,6 +24,8 @@ public class Gallery {
 
     private String country;
 
+    private boolean favorite;
+
     public void addFile(FileMetadata file) {
         files.add(file.getId());
         if (file.getCreationDate() != null) {

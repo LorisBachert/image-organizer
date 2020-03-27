@@ -36,5 +36,12 @@ public class GalleryService {
         existingGallery.setName(gallery.getName());
         List<FileMetadata> files = gallery.getFiles().stream().map(fileId -> sessionDataService.get(fileId)).collect(toList());
         existingGallery.updateFiles(files);
+        existingGallery.setFavorite(gallery.isFavorite());
+    }
+
+    public GalleryDTO create(GalleryDTO galleryDTO) {
+        Gallery gallery = galleryMapper.toModel(galleryDTO);
+        Gallery savedGallery = this.sessionDataService.addGallery(gallery);
+        return galleryMapper.toDTO(savedGallery);
     }
 }

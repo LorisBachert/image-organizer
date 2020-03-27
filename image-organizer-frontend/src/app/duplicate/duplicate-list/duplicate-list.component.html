@@ -6,7 +6,7 @@
     <mat-slide-toggle [(ngModel)]="showResolved" color="primary">{{showResolved ? 'Show Resolved' : 'Hide Resolved'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let duplicate of findDuplicatesToDisplay(); let index = index" #panel (opened)="opened(resolve, index)"
+    <mat-expansion-panel *ngFor="let duplicate of findDuplicatesToDisplay(); let index = index" #panel (opened)="selectedIndex = index"
         [expanded]="selectedIndex === index" [id]="'panel-' + index">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -15,13 +15,11 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-container *ngIf="panel.expanded">
-        <app-image-grid [ids]="duplicate.files" (imageClick)="toggleImageDeletion($event)"></app-image-grid>
+        <app-gallery (next)="next()" (previous)="previous()" [showDeletedImages]="true" [gallery]="toGallery(duplicate)" [duplicateMode]="true"></app-gallery>
+        <div class="button-bar" *ngIf="!duplicate.resolved">
+          <button mat-raised-button color="primary" (click)="resolveDuplicate(duplicate)">Mark As Resolved</button>
+        </div>
       </ng-container>
-      <div class="button-bar duplicate-button-bar">
-        <button mat-raised-button (click)="markAllForDeletion(duplicate, false)">Keep All (A)</button>
-        <button mat-raised-button (click)="markAllForDeletion(duplicate, true)">Delete All (D)</button>
-        <button mat-raised-button (click)="resolveDuplicate(duplicate)" color="primary" #resolve>Mark as resolved</button>
-      </div>
     </mat-expansion-panel>
   </mat-accordion>
 </app-centered-container>

@@ -12,10 +12,14 @@ import {MatMenuModule} from '@angular/material/menu';
 import {GalleryNameFormComponent} from './gallery-name-form/gallery-name-form.component';
 import {GalleriesComponent} from './galleries/galleries.component';
 import { GalleryComponent } from './gallery/gallery.component';
+import {MatIconModule} from '@angular/material/icon';
 
 
 @NgModule({
   declarations: [GalleriesComponent, GalleryNameFormComponent, GalleryComponent],
+  exports: [
+    GalleryComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
@@ -26,7 +30,8 @@ import { GalleryComponent } from './gallery/gallery.component';
     FormsModule,
     MatInputModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule
   ]
 })
 export class GalleriesModule {

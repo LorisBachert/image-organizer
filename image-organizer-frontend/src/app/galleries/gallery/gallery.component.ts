@@ -28,6 +28,8 @@ export class GalleryComponent implements OnInit, OnChanges {
 
   @Input() showDeletedImages: boolean;
 
+  @Input() duplicateMode: boolean;
+
   @Output() previous = new EventEmitter<void>();
 
   @Output() next = new EventEmitter<void>();
@@ -69,63 +71,90 @@ export class GalleryComponent implements OnInit, OnChanges {
 
   @HostListener('window:keyup', ['$event'])
   keyUp($event: KeyboardEvent) {
+    // select all
     if ($event.key.toLowerCase() === 'a' && $event.shiftKey) {
-      this.selectedIndexes = this.images$.getValue().map((image, index) => index);
-      this.selectedIndex = this.selectedIndexes[this.selectedIndexes.length - 1];
+      this.selectAllImages();
     } else if ($event.key === 'ArrowLeft') {
-      if (this.selectedIndex <= 0 && !$event.shiftKey) {
-        this.previous.emit();
-        return;
-      }
-      this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
-      if (!$event.shiftKey || this.selectedIndex === 0) {
-        this.selectedIndexes = [this.selectedIndex];
-      } else {
-        this.selectedIndexes.splice(this.selectedIndexes.length - 1, 1);
-      }
+      this.selectPreviousImage($event);
     } else if ($event.key === 'ArrowRight') {
-      const isAlreadyAtTheEnd = this.selectedIndex >= this.images$.getValue().length - 1;
-      if (isAlreadyAtTheEnd && !$event.shiftKey) {
+      this.selectNextImage($event);
+    } else if ($event.key.toLowerCase() === 'd' || $event.key.toLowerCase() === 'delete') {
+      this.markSelectedImagesForDeletion();
+    } else if ($event.key.toLowerCase() === 'a') {
+      this.markSelectedImagesToKeep();
+    } else if ($event.key.toLowerCase() === 'm' && ! this.duplicateMode) {
+      this.menuTrigger.openMenu();
+    }
+  }
+
+  private markSelectedImagesToKeep() {
+    const isAlreadyAtTheEnd = this.selectedIndex >= this.images$.getValue().length - 1;
+    const maxIndex = Math.max(...this.selectedIndexes.values());
+    this.doForSelection(imageId => this.imageService.markForDeletion(imageId, false));
+    if (isAlreadyAtTheEnd) {
+      if (this.selectedIndex >= this.images$.getValue().length - 1) {
         this.next.emit();
         return;
       }
-      this.selectedIndex = Math.min(this.selectedIndex + 1, this.images$.getValue().length - 1);
-      if ($event.shiftKey && !isAlreadyAtTheEnd) {
-        this.selectedIndexes.push(this.selectedIndex);
-      } else if (!$event.shiftKey) {
-        this.selectedIndexes = [this.selectedIndex];
-      }
-    } else if ($event.key.toLowerCase() === 'd' || $event.key.toLowerCase() === 'delete') {
-      const minIndex = Math.min(...this.selectedIndexes.values());
-      this.doForSelection(imageId => this.imageService.markForDeletion(imageId, true));
-      if (this.showDeletedImages) {
-        this.selectedIndex++;
-        if (this.selectedIndex > this.images$.getValue().length - 1) {
-          this.next.emit();
-          return;
-        }
-      } else {
-        this.selectedIndex = minIndex
-      }
+    } else {
+      this.setSelectedIndex(Math.min(this.images$.getValue().length - 1, maxIndex + 1));
       this.selectedIndexes = [this.selectedIndex];
-    } else if ($event.key.toLowerCase() === 'a') {
-      const isAlreadyAtTheEnd = this.selectedIndex >= this.images$.getValue().length - 1;
-      const maxIndex = Math.max(...this.selectedIndexes.values());
-      this.doForSelection(imageId => this.imageService.markForDeletion(imageId, false));
-      if (isAlreadyAtTheEnd) {
-        if (this.selectedIndex >= this.images$.getValue().length - 1) {
-          this.next.emit();
-          return;
-        }
-      } else {
-        this.selectedIndex = Math.min(this.images$.getValue().length - 1, maxIndex + 1);
-        this.selectedIndexes = [this.selectedIndex];
-      }
-    } else if ($event.key.toLowerCase() === 'm') {
-      this.menuTrigger.openMenu();
     }
+  }
+
+  private markSelectedImagesForDeletion() {
+    const minIndex = Math.min(...this.selectedIndexes.values());
+    this.doForSelection(imageId => this.imageService.markForDeletion(imageId, true));
+    if (this.showDeletedImages) {
+      this.selectedIndex++;
+      if (this.selectedIndex > this.images$.getValue().length - 1) {
+        this.next.emit();
+        return;
+      }
+    } else {
+      this.setSelectedIndex(minIndex);
+    }
+    this.selectedIndexes = [this.selectedIndex];
+  }
+
+  private selectNextImage($event: KeyboardEvent) {
+    const isAlreadyAtTheEnd = this.selectedIndex >= this.images$.getValue().length - 1;
+    if (isAlreadyAtTheEnd && !$event.shiftKey) {
+      this.next.emit();
+      return;
+    }
+    this.setSelectedIndex(Math.min(this.selectedIndex + 1, this.images$.getValue().length - 1));
+    if ($event.shiftKey && !isAlreadyAtTheEnd) {
+      this.selectedIndexes.push(this.selectedIndex);
+    } else if (!$event.shiftKey) {
+      this.selectedIndexes = [this.selectedIndex];
+    }
+  }
+
+  private selectPreviousImage($event: KeyboardEvent) {
+    if (this.selectedIndex <= 0 && !$event.shiftKey) {
+      this.previous.emit();
+      return;
+    }
+    this.setSelectedIndex(Math.max(this.selectedIndex - 1, 0));
+    if (!$event.shiftKey || this.selectedIndex === 0) {
+      this.selectedIndexes = [this.selectedIndex];
+    } else {
+      this.selectedIndexes.splice(this.selectedIndexes.length - 1, 1);
+    }
+  }
+
+  private selectAllImages() {
+    this.selectedIndexes = this.images$.getValue().map((image, index) => index);
+    this.setSelectedIndex(this.selectedIndexes[this.selectedIndexes.length - 1]);
+  }
+
+  private setSelectedIndex(selectedIndex: number) {
+    this.selectedIndex = selectedIndex;
     const imageRef = document.getElementById('image-' + this.selectedIndex);
-    imageRef.scrollIntoView({ behavior: 'smooth' });
+    if (imageRef) {
+      imageRef.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   private doForSelection(runnable: (imageId: number) => any) {
@@ -139,6 +168,9 @@ export class GalleryComponent implements OnInit, OnChanges {
   }
 
   moveSelectionTo(gallery: Gallery) {
+    if (this.duplicateMode) {
+      return;
+    }
     const minIndex = Math.min(...this.selectedIndexes.values());
     this.doForSelection(imageId => {
       gallery.files.push(imageId);
@@ -147,7 +179,7 @@ export class GalleryComponent implements OnInit, OnChanges {
           this.gallery.files.splice(this.gallery.files.findIndex(f => f === imageId), 1);
           this.galleriesService.update(this.gallery).subscribe(() => {
             this.updateImages(this.gallery, this.showDeletedImages);
-            this.selectedIndex = minIndex;
+            this.setSelectedIndex(minIndex);
             this.selectedIndexes = [this.selectedIndex];
           })
         });
@@ -157,7 +189,15 @@ export class GalleryComponent implements OnInit, OnChanges {
   galleriesToMoveTo(): Observable<Gallery[]> {
     return this.galleriesService.galleries$
       .pipe(
-        map(galleries => galleries.filter(gallery => gallery.id !== this.gallery.id))
+        map(galleries => galleries.filter(gallery => gallery.id !== this.gallery.id).sort((a, b) => {
+          if (a.favorite && ! b.favorite) {
+            return -1
+          } else if (! a.favorite && b.favorite) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }))
       )
   }
 }

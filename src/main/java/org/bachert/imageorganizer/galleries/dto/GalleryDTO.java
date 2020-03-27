@@ -26,4 +26,6 @@ public class GalleryDTO {
     private String city;
 
     private String country;
+
+    private boolean favorite;
 }

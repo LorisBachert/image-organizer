@@ -5,7 +5,21 @@
   margin-bottom: 1rem;
 
   .title {
-    flex: 1;
     margin: 0;
+  }
+
+  .gallery-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .add-gallery {
+    flex: 1;
+    margin-left: 1rem;
+
+    .mat-form-field {
+
+    }
   }
 }

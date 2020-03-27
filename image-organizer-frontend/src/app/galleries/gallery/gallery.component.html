@@ -1,8 +1,13 @@
-<app-gallery-name-form [gallery]="gallery"></app-gallery-name-form>
-<button mat-raised-button [matMenuTriggerFor]="menu">Move Selection...</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item *ngFor="let gallery of galleriesToMoveTo() | async" (click)="moveSelectionTo(gallery)">{{gallery.name}}</button>
-</mat-menu>
+<mat-card class="gallery-header" *ngIf="! duplicateMode">
+  <button class="move-button" mat-raised-button [matMenuTriggerFor]="menu">Move Selection...</button>
+  <app-gallery-name-form [gallery]="gallery"></app-gallery-name-form>
+  <mat-menu #menu="matMenu" class="large-menu">
+    <button mat-menu-item *ngFor="let gallery of galleriesToMoveTo() | async" (click)="moveSelectionTo(gallery)">
+      {{gallery.name}}
+      <mat-icon *ngIf="gallery.favorite">star</mat-icon>
+    </button>
+  </mat-menu>
+</mat-card>
 <div class="image-grid">
   <ng-container *ngFor="let image of (images$ | async); let index = index">
     <div [class.selected]="isSelected(index)" (click)="selectedIndex = index; selectedIndexes = [index]" [id]="'image-' + index">

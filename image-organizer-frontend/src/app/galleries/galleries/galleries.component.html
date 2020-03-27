@@ -1,6 +1,14 @@
 <app-centered-container [vertical]="false">
   <mat-card class="action-bar">
     <h2 class="title">Galleries</h2>
+    <div class="add-gallery">
+      <form (ngSubmit)="addGallery()">
+        <mat-form-field floatLabel="never">
+          <input matInput [(ngModel)]="newGalleryName" name="newGalleryName"/>
+          <button mat-raised-button matSuffix color="primary" type="submit">Add Gallery</button>
+        </mat-form-field>
+      </form>
+    </div>
     <mat-slide-toggle [(ngModel)]="showDeleted" color="primary">{{showDeleted ? 'Show Deleted' : 'Hide Deleted'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion>
@@ -8,7 +16,13 @@
       (opened)="selectedIndex = index">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          {{gallery.name}}
+          <div class="gallery-title">
+            {{gallery.name}}
+            <button mat-icon-button (click)="toggleFavorite(gallery); $event.stopPropagation()">
+              <mat-icon *ngIf="gallery.favorite">star</mat-icon>
+              <mat-icon *ngIf="! gallery.favorite">star_outline</mat-icon>
+            </button>
+          </div>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <app-gallery *ngIf="panel.expanded" [gallery]="gallery" [showDeletedImages]="showDeleted"

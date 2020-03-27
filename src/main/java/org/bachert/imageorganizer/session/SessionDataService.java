@@ -64,9 +64,10 @@ public class SessionDataService {
         return new ArrayList<>(this.duplicates.values());
     }
 
-    public void addGallery(Gallery gallery) {
+    public Gallery addGallery(Gallery gallery) {
         gallery.setId((long) galleries.size());
         this.galleries.put(gallery.getId(), gallery);
+        return gallery;
     }
 
     public Gallery getGallery(Long id) {
