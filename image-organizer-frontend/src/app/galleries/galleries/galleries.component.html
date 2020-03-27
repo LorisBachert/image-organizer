@@ -1,22 +1,20 @@
 <app-centered-container [vertical]="false">
   <mat-card class="action-bar">
-    <h2 class="title">Trips</h2>
+    <h2 class="title">Galleries</h2>
     <mat-slide-toggle [(ngModel)]="showDeleted" color="primary">{{showDeleted ? 'Show Deleted' : 'Hide Deleted'}}</mat-slide-toggle>
   </mat-card>
-  <mat-accordion #accordion cdkDropListGroup>
-    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel cdkDropList
-                         (cdkDropListDropped)="drop(trip, $event)" [cdkDropListData]="trip.files">
+  <mat-accordion>
+    <mat-expansion-panel *ngFor="let trip of trips; let index = index" #panel>
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{trip.name}}
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ng-container *ngIf="panel.expanded">
-        <app-trip-name-form [trip]="trip"></app-trip-name-form>
+        <app-gallery-name-form [gallery]="trip"></app-gallery-name-form>
         <div class="image-grid">
-          <ng-container *ngFor="let image of (getImages(trip) | async); let imageIndex = index">
-            <div *ngIf="! image.toDelete || showDeleted" cdkDrag [cdkDragData]="imageDragData(trip, image, imageIndex)">
-              <div class="drag-placeholder" *cdkDragPlaceholder></div>
+          <ng-container *ngFor="let image of (getImages(trip) | async)">
+            <div *ngIf="! image.toDelete || showDeleted">
               <app-image [id]="image.id" (click)="toggleImageDeletion(image)"></app-image>
             </div>
           </ng-container>
@@ -25,6 +23,6 @@
     </mat-expansion-panel>
   </mat-accordion>
   <p>
-    <app-spinner *ngIf="! (tripService.done$ | async)"></app-spinner>
+    <app-spinner *ngIf="! (galleriesService.done$ | async)"></app-spinner>
   </p>
 </app-centered-container>

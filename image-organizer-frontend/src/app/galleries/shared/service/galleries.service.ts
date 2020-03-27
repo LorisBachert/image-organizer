@@ -2,14 +2,14 @@ import {Injectable} from '@angular/core';
 import {BaseService} from '../../../shared/service/base.service';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {Trip} from '../model/trip.model';
+import {Gallery} from '../model/gallery.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TripService extends BaseService {
+export class GalleriesService extends BaseService {
 
-  public readonly trips$ = new BehaviorSubject<Trip[]>([]);
+  public readonly trips$ = new BehaviorSubject<Gallery[]>([]);
 
   public readonly done$ = new BehaviorSubject<Boolean>(true);
 
@@ -24,16 +24,16 @@ export class TripService extends BaseService {
   }
 
   pollTripsUntilDone() {
-    const loadData = () => this.http.get<Trip[]>('/trips');
+    const loadData = () => this.http.get<Gallery[]>('/trips');
     const loadDone = () => this.http.get<Boolean>('/trips/done');
-    this.pollUntilDone<Trip[]>(loadData, loadDone)
+    this.pollUntilDone<Gallery[]>(loadData, loadDone)
       .subscribe(trips => {
         this.trips$.next(trips);
       }, () => {
       }, () => this.done$.next(true));
   }
 
-  update(trip: Trip): Observable<void> {
+  update(trip: Gallery): Observable<void> {
     return this.http.put<void>(`/trips/${trip.id}`, trip);
   }
 }

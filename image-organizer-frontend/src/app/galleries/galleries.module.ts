@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TripsComponent } from './trips/trips.component';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {SharedModule} from '../shared/shared.module';
 import {MatCardModule} from '@angular/material/card';
 import {MatExpansionModule} from '@angular/material/expansion';
@@ -10,12 +9,12 @@ import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import { TripNameFormComponent } from './trip-name-form/trip-name-form.component';
-
+import {GalleryNameFormComponent} from './gallery-name-form/gallery-name-form.component';
+import {GalleriesComponent} from './galleries/galleries.component';
 
 
 @NgModule({
-  declarations: [TripsComponent, TripNameFormComponent],
+  declarations: [GalleriesComponent, GalleryNameFormComponent],
   imports: [
     CommonModule,
     SharedModule,
@@ -29,4 +28,5 @@ import { TripNameFormComponent } from './trip-name-form/trip-name-form.component
     MatMenuModule
   ]
 })
-export class TripsModule { }
+export class GalleriesModule {
+}

@@ -7,8 +7,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DuplicateModule} from './duplicate/duplicate.module';
 import {CoreModule} from './core/core.module';
 import {NavigationModule} from './navigation/navigation.module';
-import {TripsModule} from './trips/trips.module';
 import {HomeModule} from './home/home.module';
+import {GalleriesModule} from './galleries/galleries.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,7 @@ import {HomeModule} from './home/home.module';
     DuplicateModule,
     CoreModule,
     NavigationModule,
-    TripsModule,
+    GalleriesModule,
     HomeModule
   ],
   providers: [],

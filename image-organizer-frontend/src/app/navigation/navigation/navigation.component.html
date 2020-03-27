@@ -6,9 +6,9 @@
         Duplicates
         <app-spinner class="spinner" *ngIf="!(duplicateService.done$ | async)"></app-spinner>
       </a>
-      <a routerLink="/trips" routerLinkActive="active">
-        Trips
-        <app-spinner class="spinner" *ngIf="!(tripService.done$ | async)"></app-spinner>
+      <a routerLink="/galleries" routerLinkActive="active">
+        Galleries
+        <app-spinner class="spinner" *ngIf="!(galleriesService.done$ | async)"></app-spinner>
       </a>
     </div>
     <button mat-raised-button color="primary" (click)="end()">Done</button>

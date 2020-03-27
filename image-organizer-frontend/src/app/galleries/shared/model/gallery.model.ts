@@ -1,4 +1,4 @@
-export class Trip {
+export class Gallery {
   id: number;
   name: string;
   files: number[];
