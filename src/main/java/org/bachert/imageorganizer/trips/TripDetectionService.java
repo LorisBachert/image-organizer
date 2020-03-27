@@ -86,10 +86,10 @@ public class TripDetectionService implements ImageAnalyzer {
         StringBuilder builder = new StringBuilder();
         builder.append(DATE_FORMAT.format(trip.getStartDate()));
         if (!isSameDay) {
-            builder.append(" - ").append(DATE_FORMAT.format(trip.getEndDate()));
+            builder.append("-").append(DATE_FORMAT.format(trip.getEndDate()));
         }
         if (!StringUtils.isEmpty(trip.getCity())) {
-            builder.append(": ").append(trip.getCity());
+            builder.append(" ").append(trip.getCity());
         }
         return builder.toString();
     }
