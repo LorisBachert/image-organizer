@@ -13,16 +13,13 @@ import {Gallery} from '../shared/model/gallery.model';
 })
 export class GalleriesComponent implements OnInit {
 
+  selectedIndex = 0;
+
   galleries: Gallery[] = [];
 
-  galleriesService: GalleriesService;
+  showDeleted = true;
 
-  showDeleted = false;
-
-  constructor(galleriesService: GalleriesService,
-              dateService: DateService,
-              private imageService: ImageService) {
-    this.galleriesService = galleriesService;
+  constructor(private galleriesService: GalleriesService) {
   }
 
   ngOnInit(): void {
@@ -41,11 +38,11 @@ export class GalleriesComponent implements OnInit {
       })
   }
 
-  getImages(gallery: Gallery): Observable<FileMetadata[]> {
-    return combineLatest(gallery.files.map(id => this.imageService.images[id]));
+  previousGallery() {
+    this.selectedIndex = Math.max(0, this.selectedIndex - 1);
   }
 
-  toggleImageDeletion(image: FileMetadata) {
-    this.imageService.toggleDeletion(image.id);
+  nextGallery() {
+    this.selectedIndex = Math.min(this.galleries.length - 1, this.selectedIndex + 1);
   }
 }

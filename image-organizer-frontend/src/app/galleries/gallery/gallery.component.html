@@ -1,0 +1,8 @@
+<app-gallery-name-form [gallery]="gallery"></app-gallery-name-form>
+<div class="image-grid">
+  <ng-container *ngFor="let image of (images$ | async); let index = index">
+    <div [class.selected]="isSelected(index)" (click)="selectedIndex = index; selectedIndexes = [index]">
+      <app-image [id]="image.id"></app-image>
+    </div>
+  </ng-container>
+</div>

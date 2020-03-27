@@ -11,10 +11,11 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {GalleryNameFormComponent} from './gallery-name-form/gallery-name-form.component';
 import {GalleriesComponent} from './galleries/galleries.component';
+import { GalleryComponent } from './gallery/gallery.component';
 
 
 @NgModule({
-  declarations: [GalleriesComponent, GalleryNameFormComponent],
+  declarations: [GalleriesComponent, GalleryNameFormComponent, GalleryComponent],
   imports: [
     CommonModule,
     SharedModule,

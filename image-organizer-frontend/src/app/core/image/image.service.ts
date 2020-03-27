@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {FileMetadata} from '../../shared/model/file-metadata.model';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {BaseService} from '../../shared/service/base.service';
 import {HttpClient} from '@angular/common/http';
 
@@ -11,7 +11,7 @@ export class ImageService extends BaseService {
 
   public readonly done$ = new BehaviorSubject<Boolean>(true);
 
-  public images: { [id: number]: BehaviorSubject<FileMetadata> } = {};
+  private images: { [id: number]: BehaviorSubject<FileMetadata> } = {};
 
   constructor(private http: HttpClient) {
     super();
@@ -31,6 +31,13 @@ export class ImageService extends BaseService {
         images.forEach(image => this.addImage(image));
       }, () => {
       }, () => this.done$.next(true));
+  }
+
+  public getImage(id: number): Observable<FileMetadata> {
+    if (!this.images.hasOwnProperty(id)) {
+      this.images[id] = new BehaviorSubject<FileMetadata>(new FileMetadata());
+    }
+    return this.images[id];
   }
 
   public addImage(image: FileMetadata) {

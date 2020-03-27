@@ -22,7 +22,7 @@ export class ImageComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.id) {
-      this.image = this.imageService.images[changes.id.currentValue];
+      this.image = this.imageService.getImage(changes.id.currentValue);
       this.url = `${environment.api}/images/${changes.id.currentValue}`;
     }
   }

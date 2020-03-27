@@ -4,22 +4,15 @@
     <mat-slide-toggle [(ngModel)]="showDeleted" color="primary">{{showDeleted ? 'Show Deleted' : 'Hide Deleted'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let gallery of galleries; let index = index" #panel>
+    <mat-expansion-panel *ngFor="let gallery of galleries; let index = index" #panel [expanded]="selectedIndex === index"
+      (opened)="selectedIndex = index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{gallery.name}}
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ng-container *ngIf="panel.expanded">
-        <app-gallery-name-form [gallery]="gallery"></app-gallery-name-form>
-        <div class="image-grid">
-          <ng-container *ngFor="let image of (getImages(gallery) | async)">
-            <div *ngIf="! image.toDelete || showDeleted">
-              <app-image [id]="image.id" (click)="toggleImageDeletion(image)"></app-image>
-            </div>
-          </ng-container>
-        </div>
-      </ng-container>
+      <app-gallery *ngIf="panel.expanded" [gallery]="gallery" [showDeletedImages]="showDeleted"
+        (next)="nextGallery()" (previous)="previousGallery()"></app-gallery>
     </mat-expansion-panel>
   </mat-accordion>
   <p>
