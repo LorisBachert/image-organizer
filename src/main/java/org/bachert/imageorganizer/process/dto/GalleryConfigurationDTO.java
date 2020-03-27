@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TripConfigurationDTO {
+public class GalleryConfigurationDTO {
 
     private boolean enabled;
 

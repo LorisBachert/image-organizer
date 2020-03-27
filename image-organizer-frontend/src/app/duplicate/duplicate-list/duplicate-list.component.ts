@@ -50,7 +50,7 @@ export class DuplicateListComponent implements OnInit {
           this.selectedIndex++;
         }
         if (this.duplicates.every(d => d.resolved)) {
-          this.router.navigateByUrl('/trips');
+          this.router.navigateByUrl('/galleries');
         }
       });
   }

@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
       enabled: true,
       diff: 10
     },
-    trips: {
+    galleries: {
       enabled: true,
       hoursBetween: 36,
       distance: 10
@@ -35,8 +35,8 @@ export class HomeComponent implements OnInit {
       .subscribe(() => {
         if (this.config.duplicates.enabled) {
           this.router.navigateByUrl('/duplicates')
-        } else if (this.config.trips.enabled) {
-          this.router.navigateByUrl('/trips')
+        } else if (this.config.galleries.enabled) {
+          this.router.navigateByUrl('/galleries')
         }
       });
   }

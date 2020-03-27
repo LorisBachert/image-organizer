@@ -13,15 +13,15 @@
       </ng-container>
     </mat-card>
     <mat-card class="card">
-      <mat-slide-toggle [(ngModel)]="config.trips.enabled" name="tripsEnabled" color="primary">Group by Trips</mat-slide-toggle>
-      <ng-container *ngIf="config.trips.enabled">
+      <mat-slide-toggle [(ngModel)]="config.galleries.enabled" name="galleriesEnabled" color="primary">Group Galleries</mat-slide-toggle>
+      <ng-container *ngIf="config.galleries.enabled">
         <mat-form-field>
           <mat-label>Distance in kilometers</mat-label>
-          <input matInput type="number" [(ngModel)]="config.trips.distance" name="tripDist"/>
+          <input matInput type="number" [(ngModel)]="config.galleries.distance" name="tripDist"/>
         </mat-form-field>
         <mat-form-field>
           <mat-label>Maximum hours between photos</mat-label>
-          <input matInput type="number" [(ngModel)]="config.trips.hoursBetween" name="tripHours"/>
+          <input matInput type="number" [(ngModel)]="config.galleries.hoursBetween" name="tripHours"/>
         </mat-form-field>
       </ng-container>
     </mat-card>

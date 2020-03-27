@@ -11,5 +11,5 @@ public class ProcessConfigurationDTO {
 
     private DuplicateConfigurationDTO duplicates;
 
-    private TripConfigurationDTO trips;
+    private GalleryConfigurationDTO galleries;
 }

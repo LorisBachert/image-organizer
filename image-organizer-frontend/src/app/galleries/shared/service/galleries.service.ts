@@ -9,7 +9,7 @@ import {Gallery} from '../model/gallery.model';
 })
 export class GalleriesService extends BaseService {
 
-  public readonly trips$ = new BehaviorSubject<Gallery[]>([]);
+  public readonly galleries$ = new BehaviorSubject<Gallery[]>([]);
 
   public readonly done$ = new BehaviorSubject<Boolean>(true);
 
@@ -19,21 +19,21 @@ export class GalleriesService extends BaseService {
 
   start() {
     this.done$.next(false);
-    this.trips$.next([]);
-    this.pollTripsUntilDone();
+    this.galleries$.next([]);
+    this.pollGalleriesUntilDone();
   }
 
-  pollTripsUntilDone() {
-    const loadData = () => this.http.get<Gallery[]>('/trips');
-    const loadDone = () => this.http.get<Boolean>('/trips/done');
+  pollGalleriesUntilDone() {
+    const loadData = () => this.http.get<Gallery[]>('/galleries');
+    const loadDone = () => this.http.get<Boolean>('/galleries/done');
     this.pollUntilDone<Gallery[]>(loadData, loadDone)
-      .subscribe(trips => {
-        this.trips$.next(trips);
+      .subscribe(galleries => {
+        this.galleries$.next(galleries);
       }, () => {
       }, () => this.done$.next(true));
   }
 
-  update(trip: Gallery): Observable<void> {
-    return this.http.put<void>(`/trips/${trip.id}`, trip);
+  update(gallery: Gallery): Observable<void> {
+    return this.http.put<void>(`/galleries/${gallery.id}`, gallery);
   }
 }

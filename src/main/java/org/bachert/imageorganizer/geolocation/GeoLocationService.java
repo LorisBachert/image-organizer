@@ -1,10 +1,10 @@
 package org.bachert.imageorganizer.geolocation;
 
 import com.drew.lang.GeoLocation;
+import org.bachert.imageorganizer.galleries.model.Gallery;
 import org.bachert.imageorganizer.geolocation.model.GeoLocationAddress;
 import org.bachert.imageorganizer.geolocation.model.GeoLocationResult;
 import org.bachert.imageorganizer.session.SessionDataService;
-import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +23,8 @@ public class GeoLocationService {
 
     private static final Map<GeoLocation, GeoLocationAddress> CACHE = new HashMap<>();
 
-    public void getCountryAndCity(Trip trip) {
-        Optional<GeoLocation> geoLocationOpt = trip.getFiles().stream().findFirst().map(fileId -> sessionDataService.get(fileId).getGeoLocation());
+    public void getCountryAndCity(Gallery gallery) {
+        Optional<GeoLocation> geoLocationOpt = gallery.getFiles().stream().findFirst().map(fileId -> sessionDataService.get(fileId).getGeoLocation());
         if (! geoLocationOpt.isPresent()) {
             return;
         }
@@ -42,8 +42,8 @@ public class GeoLocationService {
             }
         });
         Optional.ofNullable(geoLocationAddress).ifPresent(address -> {
-            trip.setCity(address.getCity());
-            trip.setCountry(address.getCountry());
+            gallery.setCity(address.getCity());
+            gallery.setCountry(address.getCountry());
         });
     }
 }

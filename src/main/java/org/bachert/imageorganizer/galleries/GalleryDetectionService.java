@@ -1,14 +1,14 @@
-package org.bachert.imageorganizer.trips;
+package org.bachert.imageorganizer.galleries;
 
 import com.drew.lang.GeoLocation;
 import lombok.extern.slf4j.Slf4j;
 import org.bachert.imageorganizer.analyzer.ImageAnalyzer;
+import org.bachert.imageorganizer.galleries.model.Gallery;
 import org.bachert.imageorganizer.geolocation.GeoLocationService;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
 import org.bachert.imageorganizer.process.dto.ProcessConfigurationDTO;
 import org.bachert.imageorganizer.session.SessionDataService;
-import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
-public class TripDetectionService implements ImageAnalyzer {
+public class GalleryDetectionService implements ImageAnalyzer {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy.MM.dd");
 
@@ -31,35 +31,35 @@ public class TripDetectionService implements ImageAnalyzer {
 
     @Override
     public void accept(List<FileMetadata> files, ProcessConfigurationDTO configuration) {
-        if (! configuration.getTrips().isEnabled()) {
-            sessionDataService.setDoneDetectingTrips(true);
+        if (! configuration.getGalleries().isEnabled()) {
+            sessionDataService.setDoneDetectingGalleries(true);
             return;
         }
         files.sort(new FileMetadataComparator());
-        Trip trip = new Trip();
+        Gallery gallery = new Gallery();
         FileMetadata lastFileMetadata = null;
         for (FileMetadata file : files) {
-            if (isNewTrip(file, lastFileMetadata, configuration)) {
-                addTrip(trip);
-                trip = new Trip();
+            if (isNewGallery(file, lastFileMetadata, configuration)) {
+                addGallery(gallery);
+                gallery = new Gallery();
             }
-            trip.addFile(file);
+            gallery.addFile(file);
             lastFileMetadata = file;
         }
-        addTrip(trip);
-        sessionDataService.setDoneDetectingTrips(true);
+        addGallery(gallery);
+        sessionDataService.setDoneDetectingGalleries(true);
     }
 
-    private void addTrip(Trip trip) {
-        geoLocationService.getCountryAndCity(trip);
-        trip.setName(getName(trip));
-        sessionDataService.addTrip(trip);
+    private void addGallery(Gallery gallery) {
+        geoLocationService.getCountryAndCity(gallery);
+        gallery.setName(getName(gallery));
+        sessionDataService.addGallery(gallery);
     }
 
-    private static boolean isNewTrip(FileMetadata currentFile, FileMetadata lastFile, ProcessConfigurationDTO configuration) {
+    private static boolean isNewGallery(FileMetadata currentFile, FileMetadata lastFile, ProcessConfigurationDTO configuration) {
         return lastFile != null &&
-                (atMostHoursDiff(currentFile, lastFile, configuration.getTrips().getHoursBetween()) ||
-                        distance(currentFile.getGeoLocation(), lastFile.getGeoLocation()) > configuration.getTrips().getDistance());
+                (atMostHoursDiff(currentFile, lastFile, configuration.getGalleries().getHoursBetween()) ||
+                        distance(currentFile.getGeoLocation(), lastFile.getGeoLocation()) > configuration.getGalleries().getDistance());
     }
 
     private static boolean atMostHoursDiff(FileMetadata currentFile, FileMetadata lastFile, double hoursBetween) {
@@ -82,17 +82,17 @@ public class TripDetectionService implements ImageAnalyzer {
         return (float) (earthRadius * c);
     }
 
-    private static String getName(Trip trip) {
-        long diffInMillis = trip.getEndDate().getTime() - trip.getStartDate().getTime();
+    private static String getName(Gallery gallery) {
+        long diffInMillis = gallery.getEndDate().getTime() - gallery.getStartDate().getTime();
         long diffInDays = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
         boolean isSameDay = diffInDays == 1;
         StringBuilder builder = new StringBuilder();
-        builder.append(DATE_FORMAT.format(trip.getStartDate()));
+        builder.append(DATE_FORMAT.format(gallery.getStartDate()));
         if (!isSameDay) {
-            builder.append("-").append(DATE_FORMAT.format(trip.getEndDate()));
+            builder.append("-").append(DATE_FORMAT.format(gallery.getEndDate()));
         }
-        if (!StringUtils.isEmpty(trip.getCity())) {
-            builder.append(" ").append(trip.getCity());
+        if (!StringUtils.isEmpty(gallery.getCity())) {
+            builder.append(" ").append(gallery.getCity());
         }
         return builder.toString();
     }

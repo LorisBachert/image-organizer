@@ -1,4 +1,4 @@
-package org.bachert.imageorganizer.trips.model;
+package org.bachert.imageorganizer.galleries.model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.util.*;
 
 @Getter
 @Setter
-public class Trip {
+public class Gallery {
 
     private Long id;
 
@@ -43,7 +43,7 @@ public class Trip {
 
     @Override
     public String toString() {
-        return "Trip{" +
+        return "Gallery{" +
                 "images=" + files.size() +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +

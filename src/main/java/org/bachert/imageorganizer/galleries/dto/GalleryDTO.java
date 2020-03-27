@@ -1,4 +1,4 @@
-package org.bachert.imageorganizer.trips.dto;
+package org.bachert.imageorganizer.galleries.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TripDTO {
+public class GalleryDTO {
 
     private Long id;
 

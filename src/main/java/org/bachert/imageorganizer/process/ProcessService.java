@@ -62,12 +62,12 @@ public class ProcessService {
     }
 
     public void end() {
-        this.sessionDataService.getTrips().forEach(trip -> {
-            List<FileMetadata> files = trip.getFiles().stream()
+        this.sessionDataService.getGalleries().forEach(gallery -> {
+            List<FileMetadata> files = gallery.getFiles().stream()
                     .map(sessionDataService::get)
                     .filter(file -> !file.isToDelete())
                     .collect(Collectors.toList());
-            IOService.moveFiles(configuration.getDirectory(), trip, files);
+            IOService.moveFiles(configuration.getDirectory(), gallery, files);
         });
     }
 }

@@ -13,7 +13,7 @@ import {Gallery} from '../shared/model/gallery.model';
 })
 export class GalleriesComponent implements OnInit {
 
-  trips: Gallery[] = [];
+  galleries: Gallery[] = [];
 
   galleriesService: GalleriesService;
 
@@ -26,17 +26,17 @@ export class GalleriesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.galleriesService.trips$
-      .subscribe(trips => {
-        if (trips.length > 0) {
-          trips.forEach(trip => {
-            const isNew = this.trips.find(existingTrip => existingTrip.id === trip.id) === undefined;
+    this.galleriesService.galleries$
+      .subscribe(galleries => {
+        if (galleries.length > 0) {
+          galleries.forEach(gallery => {
+            const isNew = this.galleries.find(existingGallery => existingGallery.id === gallery.id) === undefined;
             if (isNew) {
-              this.trips.push(trip);
+              this.galleries.push(gallery);
             }
           });
         } else {
-          this.trips = [];
+          this.galleries = [];
         }
       })
   }

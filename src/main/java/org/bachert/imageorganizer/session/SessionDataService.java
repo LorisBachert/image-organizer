@@ -3,13 +3,11 @@ package org.bachert.imageorganizer.session;
 import lombok.Getter;
 import lombok.Setter;
 import org.bachert.imageorganizer.duplicates.model.Duplicate;
+import org.bachert.imageorganizer.galleries.model.Gallery;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
 import org.bachert.imageorganizer.metadata.sort.FileMetadataComparator;
-import org.bachert.imageorganizer.trips.model.Trip;
 import org.springframework.stereotype.Service;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 
 @Service
@@ -25,13 +23,13 @@ public class SessionDataService {
 
     @Getter
     @Setter
-    private boolean doneDetectingTrips = false;
+    private boolean doneDetectingGalleries = false;
 
     private Map<Long, FileMetadata> files = new HashMap<>();
 
     private Map<Long, Duplicate> duplicates = new HashMap<>();
 
-    private Map<Long, Trip> trips = new HashMap<>();
+    private Map<Long, Gallery> galleries = new HashMap<>();
 
     public void add(FileMetadata fileMetadata) {
         fileMetadata.setId((long) files.size());
@@ -66,25 +64,25 @@ public class SessionDataService {
         return new ArrayList<>(this.duplicates.values());
     }
 
-    public void addTrip(Trip trip) {
-        trip.setId((long) trips.size());
-        this.trips.put(trip.getId(), trip);
+    public void addGallery(Gallery gallery) {
+        gallery.setId((long) galleries.size());
+        this.galleries.put(gallery.getId(), gallery);
     }
 
-    public Trip getTrip(Long id) {
-        return this.trips.get(id);
+    public Gallery getGallery(Long id) {
+        return this.galleries.get(id);
     }
 
-    public List<Trip> getTrips() {
-        return new ArrayList<>(this.trips.values());
+    public List<Gallery> getGalleries() {
+        return new ArrayList<>(this.galleries.values());
     }
 
     public void reset() {
         this.files.clear();
         this.duplicates.clear();
-        this.trips.clear();
+        this.galleries.clear();
         this.doneLoadingFiles = false;
         this.doneDetectingDuplicates = false;
-        this.doneDetectingTrips = false;
+        this.doneDetectingGalleries = false;
     }
 }

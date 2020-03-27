@@ -1,8 +1,8 @@
 package org.bachert.imageorganizer.io;
 
 import lombok.extern.slf4j.Slf4j;
+import org.bachert.imageorganizer.galleries.model.Gallery;
 import org.bachert.imageorganizer.metadata.model.FileMetadata;
-import org.bachert.imageorganizer.trips.model.Trip;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 @Slf4j
 public class IOService {
 
-    private static final String TRIP_DIRECTORY_PATTERN = "%s\\%s";
+    private static final String GALLERY_DIRECTORY_PATTERN = "%s\\%s";
 
     private static final String FILE_PATTERN = "%s\\%s_%d.%s";
 
@@ -42,18 +42,18 @@ public class IOService {
         }
     }
 
-    public static void moveFiles(String rootDirectory, Trip trip, List<FileMetadata> files) {
-        log.info("Moving files for trip: {}", trip.getName());
-        String tripDirectoryPath = String.format(TRIP_DIRECTORY_PATTERN, rootDirectory, trip.getName());
-        File tripDirectory = new File(tripDirectoryPath);
-        if (!tripDirectory.exists() && !tripDirectory.mkdir()) {
-            log.error("Failed to create directory: {}", tripDirectoryPath);
+    public static void moveFiles(String rootDirectory, Gallery gallery, List<FileMetadata> files) {
+        log.info("Moving files for gallery: {}", gallery.getName());
+        String galleryDirectoryPath = String.format(GALLERY_DIRECTORY_PATTERN, rootDirectory, gallery.getName());
+        File galleryDirectory = new File(galleryDirectoryPath);
+        if (!galleryDirectory.exists() && !galleryDirectory.mkdir()) {
+            log.error("Failed to create directory: {}", galleryDirectoryPath);
             return;
         }
         IntStream.range(0, files.size()).forEach(index -> {
             FileMetadata file = files.get(index);
-            log.info("Moving file '{}' for trip '{}'", file.getPath(), trip.getName());
-            String newFileName = String.format(FILE_PATTERN, tripDirectoryPath, trip.getName(), index, file.getExtension());
+            log.info("Moving file '{}' for gallery '{}'", file.getPath(), gallery.getName());
+            String newFileName = String.format(FILE_PATTERN, galleryDirectoryPath, gallery.getName(), index, file.getExtension());
             try {
                 Files.copy(file.getPath(), Paths.get(newFileName));
             } catch (IOException e) {
