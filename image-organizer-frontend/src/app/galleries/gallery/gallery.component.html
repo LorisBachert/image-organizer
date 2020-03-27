@@ -1,7 +1,11 @@
 <app-gallery-name-form [gallery]="gallery"></app-gallery-name-form>
+<button mat-raised-button [matMenuTriggerFor]="menu">Move Selection...</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item *ngFor="let gallery of galleriesToMoveTo() | async" (click)="moveSelectionTo(gallery)">{{gallery.name}}</button>
+</mat-menu>
 <div class="image-grid">
   <ng-container *ngFor="let image of (images$ | async); let index = index">
-    <div [class.selected]="isSelected(index)" (click)="selectedIndex = index; selectedIndexes = [index]">
+    <div [class.selected]="isSelected(index)" (click)="selectedIndex = index; selectedIndexes = [index]" [id]="'image-' + index">
       <app-image [id]="image.id"></app-image>
     </div>
   </ng-container>
