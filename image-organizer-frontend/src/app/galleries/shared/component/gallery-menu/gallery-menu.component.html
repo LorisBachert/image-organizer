@@ -1,0 +1,20 @@
+<button class="move-button" mat-raised-button [matMenuTriggerFor]="menu">Move Selection...</button>
+<mat-menu #menu="matMenu" class="large-menu">
+  <button mat-menu-item *ngFor="let gallery of favorites | async" (click)="this.select.emit(gallery)" tabindex="0" (keyup)="$event.stopPropagation()">
+    {{gallery.name}}
+    <mat-icon *ngIf="gallery.favorite">star</mat-icon>
+  </button>
+  <form mat-menu-item (ngSubmit)="createGallery()" (click)="$event.stopPropagation()" (focusin)="input.focus()">
+    <mat-form-field>
+      <mat-label>New Gallery</mat-label>
+      <input matInput (keyup)="$event.stopPropagation()" [(ngModel)]="newGalleryName" name="newGalleryName" #input/>
+    </mat-form-field>
+  </form>
+  <button mat-menu-item [mat-menu-trigger-for]="nonFavoritesMenu" tabindex="0" (keyup)="$event.stopPropagation()">Others...</button>
+</mat-menu>
+
+<mat-menu #nonFavoritesMenu="matMenu" class="large-menu">
+  <button mat-menu-item *ngFor="let gallery of nonFavorites | async" (click)="this.select.emit(gallery)" tabindex="0" (keyup)="$event.stopPropagation()">
+    {{gallery.name}}
+  </button>
+</mat-menu>

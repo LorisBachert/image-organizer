@@ -35,7 +35,15 @@ export class GalleriesService extends BaseService {
   }
 
   update(gallery: Gallery): Observable<void> {
-    return this.http.put<void>(`/galleries/${gallery.id}`, gallery);
+    return this.http.put<void>(`/galleries/${gallery.id}`, gallery)
+      .pipe(
+        tap(() => {
+          const galleries = this.galleries$.getValue();
+          const index = galleries.findIndex(g => g.id === gallery.id);
+          galleries[index] = gallery;
+          this.galleries$.next(galleries);
+        })
+      );
   }
 
   create(newGalleryName: string): Observable<Gallery> {

@@ -17,6 +17,7 @@ import {ImageService} from '../../core/image/image.service';
 import {GalleriesService} from '../shared/service/galleries.service';
 import {MatMenu, MatMenuTrigger} from '@angular/material/menu';
 import {filter, map} from 'rxjs/operators';
+import {GalleryMenuComponent} from '../shared/component/gallery-menu/gallery-menu.component';
 
 @Component({
   selector: 'app-gallery',
@@ -43,7 +44,7 @@ export class GalleryComponent implements OnChanges {
 
   galleriesService: GalleriesService;
 
-  @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
+  @ViewChild(GalleryMenuComponent) menu: GalleryMenuComponent;
 
   constructor(private imageService: ImageService,
               galleriesService: GalleriesService) {
@@ -81,7 +82,7 @@ export class GalleryComponent implements OnChanges {
     } else if ($event.key.toLowerCase() === 'a') {
       this.markSelectedImagesToKeep();
     } else if ($event.key.toLowerCase() === 'm' && ! this.duplicateMode) {
-      this.menuTrigger.openMenu();
+      this.menu.open();
     }
   }
 
@@ -182,20 +183,5 @@ export class GalleryComponent implements OnChanges {
           })
         });
     })
-  }
-
-  galleriesToMoveTo(): Observable<Gallery[]> {
-    return this.galleriesService.galleries$
-      .pipe(
-        map(galleries => galleries.filter(gallery => gallery.id !== this.gallery.id).sort((a, b) => {
-          if (a.favorite && ! b.favorite) {
-            return -1
-          } else if (! a.favorite && b.favorite) {
-            return 1;
-          } else {
-            return 0;
-          }
-        }))
-      )
   }
 }

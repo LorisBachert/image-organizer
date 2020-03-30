@@ -13,10 +13,11 @@ import {GalleryNameFormComponent} from './gallery-name-form/gallery-name-form.co
 import {GalleriesComponent} from './galleries/galleries.component';
 import { GalleryComponent } from './gallery/gallery.component';
 import {MatIconModule} from '@angular/material/icon';
+import { GalleryMenuComponent } from './shared/component/gallery-menu/gallery-menu.component';
 
 
 @NgModule({
-  declarations: [GalleriesComponent, GalleryNameFormComponent, GalleryComponent],
+  declarations: [GalleriesComponent, GalleryNameFormComponent, GalleryComponent, GalleryMenuComponent],
   exports: [
     GalleryComponent
   ],
