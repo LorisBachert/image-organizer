@@ -1,4 +1,4 @@
-<button class="move-button" mat-raised-button [matMenuTriggerFor]="menu">Move Selection...</button>
+<button class="move-button" mat-raised-button color="primary" [matMenuTriggerFor]="menu">Move Selection...</button>
 <mat-menu #menu="matMenu" class="large-menu">
   <button mat-menu-item *ngFor="let gallery of favorites | async" (click)="this.select.emit(gallery)" tabindex="0" (keyup)="$event.stopPropagation()">
     {{gallery.name}}

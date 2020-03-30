@@ -1,5 +1,5 @@
 <mat-card class="gallery-header" *ngIf="! duplicateMode">
-  <app-gallery-menu (select)="moveSelectionTo($event)"></app-gallery-menu>
+  <app-gallery-menu (select)="moveSelectionTo($event)" [currentGalleryId]="gallery.id" class="move-menu"></app-gallery-menu>
   <app-gallery-name-form [gallery]="gallery"></app-gallery-name-form>
 </mat-card>
 <div class="image-grid">

@@ -38,7 +38,6 @@ export class GalleriesComponent implements OnInit {
             if (index === -1) {
               this.galleries.push(gallery);
             } else {
-              console.log(gallery);
               this.galleries[index] = gallery;
             }
           });

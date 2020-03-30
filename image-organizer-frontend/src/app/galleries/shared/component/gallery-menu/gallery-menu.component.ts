@@ -11,6 +11,8 @@ import {MatMenuTrigger} from '@angular/material/menu';
 })
 export class GalleryMenuComponent implements OnInit {
 
+  @Input() currentGalleryId: number;
+
   @Output() select = new EventEmitter<Gallery>();
 
   favorites = new BehaviorSubject<Gallery[]>([]);
@@ -22,13 +24,13 @@ export class GalleryMenuComponent implements OnInit {
   @ViewChild(MatMenuTrigger) menuTrigger: MatMenuTrigger;
 
   constructor(private galleriesService: GalleriesService) {
-    this.galleriesService.galleries$.subscribe(galleries => {
-      this.favorites.next(galleries.filter(g => g.favorite));
-      this.nonFavorites.next(galleries.filter(g => ! g.favorite));
-    })
   }
 
   ngOnInit(): void {
+    this.galleriesService.galleries$.subscribe(galleries => {
+      this.favorites.next(galleries.filter(g => g.favorite && g.id !== this.currentGalleryId));
+      this.nonFavorites.next(galleries.filter(g => ! g.favorite && g.id !== this.currentGalleryId));
+    })
   }
 
   open() {
