@@ -7,4 +7,5 @@ export class Gallery {
   city: string;
   country: string;
   favorite: boolean;
+  hidden: boolean;
 }

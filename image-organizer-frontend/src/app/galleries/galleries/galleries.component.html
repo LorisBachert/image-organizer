@@ -12,8 +12,8 @@
     <mat-slide-toggle [(ngModel)]="showDeleted" color="primary">{{showDeleted ? 'Show Deleted' : 'Hide Deleted'}}</mat-slide-toggle>
   </mat-card>
   <mat-accordion>
-    <mat-expansion-panel *ngFor="let gallery of galleries; let index = index" #panel [expanded]="selectedIndex === index"
-      (opened)="setSelctedIndex(index)" [id]="'panel-' + index">
+    <mat-expansion-panel *ngFor="let gallery of visibleGalleries(); let index = index" #panel [expanded]="selectedIndex === index"
+                         (opened)="setSelectedIndex(index)" [id]="'panel-' + index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <div class="gallery-title">

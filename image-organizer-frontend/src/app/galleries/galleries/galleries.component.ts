@@ -33,15 +33,23 @@ export class GalleriesComponent implements OnInit {
       .subscribe(galleries => {
         if (galleries.length > 0) {
           galleries.forEach(gallery => {
-            const isNew = this.galleries.find(existingGallery => existingGallery.id === gallery.id) === undefined;
-            if (isNew) {
+            gallery.hidden = gallery.files.length === 0;
+            const index = this.galleries.findIndex(existingGallery => existingGallery.id === gallery.id);
+            if (index === -1) {
               this.galleries.push(gallery);
+            } else {
+              console.log(gallery);
+              this.galleries[index] = gallery;
             }
           });
         } else {
           this.galleries = [];
         }
       })
+  }
+
+  visibleGalleries() {
+    return this.galleries.filter(g => ! g.hidden);
   }
 
   previousGallery() {
@@ -65,7 +73,7 @@ export class GalleriesComponent implements OnInit {
       .subscribe(() => {});
   }
 
-  setSelctedIndex(index: number) {
+  setSelectedIndex(index: number) {
     this.selectedIndex = index;
     setTimeout(() => {
       const panelRef = document.getElementById('panel-' + this.selectedIndex);
