@@ -56,7 +56,7 @@ export class GalleriesComponent implements OnInit {
   }
 
   nextGallery() {
-    this.selectedIndex = Math.min(this.galleries.length - 1, this.selectedIndex + 1);
+    this.selectedIndex = Math.min(this.visibleGalleries().length - 1, this.selectedIndex + 1);
   }
 
   addGallery() {
