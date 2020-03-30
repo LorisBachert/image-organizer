@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   HostListener,
@@ -22,7 +23,7 @@ import {filter, map} from 'rxjs/operators';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
-export class GalleryComponent implements OnInit, OnChanges {
+export class GalleryComponent implements OnChanges {
 
   @Input() gallery: Gallery;
 
@@ -47,9 +48,6 @@ export class GalleryComponent implements OnInit, OnChanges {
   constructor(private imageService: ImageService,
               galleriesService: GalleriesService) {
     this.galleriesService = galleriesService;
-  }
-
-  ngOnInit(): void {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -106,7 +104,7 @@ export class GalleryComponent implements OnInit, OnChanges {
     const minIndex = Math.min(...this.selectedIndexes.values());
     this.doForSelection(imageId => this.imageService.markForDeletion(imageId, true));
     if (this.showDeletedImages) {
-      this.selectedIndex++;
+      this.setSelectedIndex(this.selectedIndex + 1)
       if (this.selectedIndex > this.images$.getValue().length - 1) {
         this.next.emit();
         return;

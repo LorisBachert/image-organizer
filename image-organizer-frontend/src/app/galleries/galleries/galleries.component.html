@@ -13,7 +13,7 @@
   </mat-card>
   <mat-accordion>
     <mat-expansion-panel *ngFor="let gallery of galleries; let index = index" #panel [expanded]="selectedIndex === index"
-      (opened)="selectedIndex = index">
+      (opened)="setSelctedIndex(index)" [id]="'panel-' + index">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <div class="gallery-title">

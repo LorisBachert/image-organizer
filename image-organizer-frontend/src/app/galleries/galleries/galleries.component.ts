@@ -5,6 +5,7 @@ import {ImageService} from '../../core/image/image.service';
 import {combineLatest, Observable} from 'rxjs';
 import {GalleriesService} from '../shared/service/galleries.service';
 import {Gallery} from '../shared/model/gallery.model';
+import {MatExpansionPanel} from '@angular/material/expansion';
 
 @Component({
   selector: 'app-galleries',
@@ -21,7 +22,10 @@ export class GalleriesComponent implements OnInit {
 
   newGalleryName: string;
 
-  constructor(private galleriesService: GalleriesService) {
+  galleriesService: GalleriesService;
+
+  constructor(galleriesService: GalleriesService) {
+    this.galleriesService = galleriesService;
   }
 
   ngOnInit(): void {
@@ -59,5 +63,16 @@ export class GalleriesComponent implements OnInit {
     gallery.favorite = ! gallery.favorite;
     this.galleriesService.update(gallery)
       .subscribe(() => {});
+  }
+
+  setSelctedIndex(index: number) {
+    console.log('opened');
+    this.selectedIndex = index;
+    setTimeout(() => {
+      const panelRef = document.getElementById('panel-' + this.selectedIndex);
+      if (panelRef) {
+        panelRef.scrollIntoView({ behavior: 'smooth'});
+      }
+    }, 250);
   }
 }
