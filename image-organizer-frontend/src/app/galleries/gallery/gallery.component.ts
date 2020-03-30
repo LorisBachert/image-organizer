@@ -11,7 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {Gallery} from '../shared/model/gallery.model';
-import {BehaviorSubject, combineLatest, Observable} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
 import {FileMetadata} from '../../shared/model/file-metadata.model';
 import {ImageService} from '../../core/image/image.service';
 import {GalleriesService} from '../shared/service/galleries.service';
@@ -65,7 +65,11 @@ export class GalleryComponent implements OnChanges {
   }
 
   getImages(gallery: Gallery): Observable<FileMetadata[]> {
-    return combineLatest(gallery.files.map(id => this.imageService.getImage(id)));
+    if (gallery.files && gallery.files.length > 0) {
+      return combineLatest(gallery.files.map(id => this.imageService.getImage(id)));
+    } else {
+      return of([]);
+    }
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -173,15 +177,19 @@ export class GalleryComponent implements OnChanges {
     const minIndex = Math.min(...this.selectedIndexes.values());
     this.doForSelection(imageId => {
       gallery.files.push(imageId);
-      this.galleriesService.update(gallery)
-        .subscribe(() => {
-          this.gallery.files.splice(this.gallery.files.findIndex(f => f === imageId), 1);
-          this.galleriesService.update(this.gallery).subscribe(() => {
-            this.updateImages(this.gallery, this.showDeletedImages);
+      this.gallery.files.splice(this.gallery.files.findIndex(f => f === imageId), 1);
+    });
+    this.galleriesService.update(gallery)
+      .subscribe(() => {
+        this.galleriesService.update(this.gallery).subscribe(() => {
+          this.updateImages(this.gallery, this.showDeletedImages);
+          if (this.gallery.files.length === 0) {
+            this.next.emit();
+          } else {
             this.setSelectedIndex(minIndex);
             this.selectedIndexes = [this.selectedIndex];
-          })
-        });
-    })
+          }
+        })
+      });
   }
 }

@@ -17,7 +17,6 @@ export abstract class BaseService {
     const loadFinally = done$
       .pipe(
         filter(done => !!done),
-        tap(() => console.log('done')),
         mergeMap(loadData),
         take(1)
       );

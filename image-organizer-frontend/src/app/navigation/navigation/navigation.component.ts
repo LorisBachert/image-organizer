@@ -28,7 +28,6 @@ export class NavigationComponent implements OnInit {
   end() {
     this.processService.end()
       .subscribe(() => {
-        console.log('done');
       })
   }
 }

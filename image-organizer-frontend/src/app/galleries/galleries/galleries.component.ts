@@ -66,7 +66,6 @@ export class GalleriesComponent implements OnInit {
   }
 
   setSelctedIndex(index: number) {
-    console.log('opened');
     this.selectedIndex = index;
     setTimeout(() => {
       const panelRef = document.getElementById('panel-' + this.selectedIndex);
